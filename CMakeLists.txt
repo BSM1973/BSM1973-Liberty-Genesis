@@ -5,6 +5,8 @@ target_include_directories(genesis_engine INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/
 target_compile_features(genesis_engine INTERFACE cxx_std_17)
 add_executable(genesis_demo tools/render_demo.cpp)
 target_link_libraries(genesis_demo PRIVATE genesis_engine)
+add_executable(genesis_presets tools/render_presets.cpp)
+target_link_libraries(genesis_presets PRIVATE genesis_engine)
 include(CTest)
 if(BUILD_TESTING)
     add_executable(genesis_smoke tests/smoke.cpp)

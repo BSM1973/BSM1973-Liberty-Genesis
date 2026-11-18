@@ -18,17 +18,27 @@ jobs:
         run: cmake --build build --config Release --parallel
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure
-      - name: Generate WAV demo
-        run: cmake --build build --config Release --target genesis_demo
-      - name: Render WAV
-        run: ./build/genesis_demo
+      - name: Render demo (Unix)
         if: runner.os != 'Windows'
-      - name: Render WAV on Windows
-        run: .\build\Release\genesis_demo.exe
+        run: |
+          ./build/genesis_demo
+          ./build/genesis_presets --list
+          ./build/genesis_presets --render 0 genesis-preset-00.wav
+          ./build/genesis_presets --render 5 genesis-preset-05.wav
+      - name: Render demo (Windows)
         if: runner.os == 'Windows'
-      - name: Upload demo WAV
+        shell: pwsh
+        run: |
+          & .\build\Release\genesis_demo.exe
+          & .\build\Release\genesis_presets.exe --list
+          & .\build\Release\genesis_presets.exe --render 0 genesis-preset-00.wav
+          & .\build\Release\genesis_presets.exe --render 5 genesis-preset-05.wav
+      - name: Upload WAV previews
         uses: actions/upload-artifact@v4
         with:
-          name: genesis-demo-${{ matrix.os }}
-          path: genesis-demo.wav
+          name: genesis-wav-${{ matrix.os }}
+          path: |
+            genesis-demo.wav
+            genesis-preset-00.wav
+            genesis-preset-05.wav
           if-no-files-found: error

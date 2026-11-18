@@ -1,4 +1,5 @@
 #include "../src/GenesisSynth.h"
+#include "../src/GenesisPresets.h"
 #include <array>
 #include <cassert>
 #include <cmath>
@@ -21,4 +22,11 @@ int main(){
  for(int i=0;i<100;++i)synth.process(left.data(),right.data(),512);
  for(float x:left)assert(std::abs(x)<.00001f);
  synth.allNotesOff();
+ for(const auto& preset:liberty::factoryPresets){
+  liberty::applyPreset(synth,preset);
+  synth.noteOn(60,.8f);
+  synth.process(left.data(),right.data(),512);
+  for(float sample:left)assert(std::isfinite(sample));
+  synth.allNotesOff();
+ }
 }

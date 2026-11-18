@@ -1,6 +1,7 @@
 #include "../src/GenesisSynth.h"
 #include "../src/GenesisPresets.h"
 #include "../src/GenesisPresetBrowser.h"
+#include "../src/GenesisAudioEngine.h"
 #include <array>
 #include <cassert>
 #include <cmath>
@@ -23,6 +24,18 @@ int main(){
  for(int i=0;i<100;++i)synth.process(left.data(),right.data(),512);
  for(float x:left)assert(std::abs(x)<.00001f);
  synth.allNotesOff();
+ liberty::GenesisAudioEngine engine;
+ engine.synth().setSampleRate(48000.);
+ const liberty::MidiEvent events[] = {
+  {128,liberty::MidiEvent::Type::NoteOn,60,.8f},
+  {384,liberty::MidiEvent::Type::NoteOff,60,0.f}
+ };
+ engine.process(left.data(),right.data(),512,events,2);
+ for(int i=0;i<128;++i)assert(left[i]==0.f);
+ bool midiAudible=false;
+ for(int i=128;i<384;++i)if(std::abs(left[i])>.00001f)midiAudible=true;
+ assert(midiAudible);
+ for(float sample:left)assert(std::isfinite(sample));
  liberty::GenesisPresetBrowser browser;
  assert(browser.count()==12);
  assert(browser.at(12)==nullptr);

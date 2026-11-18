@@ -1,5 +1,6 @@
 #include "../src/GenesisSynth.h"
 #include "../src/GenesisPresets.h"
+#include "../src/GenesisPresetBrowser.h"
 #include <array>
 #include <cassert>
 #include <cmath>
@@ -22,6 +23,14 @@ int main(){
  for(int i=0;i<100;++i)synth.process(left.data(),right.data(),512);
  for(float x:left)assert(std::abs(x)<.00001f);
  synth.allNotesOff();
+ liberty::GenesisPresetBrowser browser;
+ assert(browser.count()==12);
+ assert(browser.at(12)==nullptr);
+ assert(browser.findByName("Aurora Pad")!=nullptr);
+ assert(browser.search("BASS").size()==1);
+ assert(browser.search("no such preset").empty());
+ assert(browser.load(synth,0));
+ assert(!browser.load(synth,100));
  for(const auto& preset:liberty::factoryPresets){
   liberty::applyPreset(synth,preset);
   synth.noteOn(60,.8f);

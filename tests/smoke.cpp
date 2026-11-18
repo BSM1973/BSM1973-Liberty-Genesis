@@ -3,6 +3,9 @@
 #include "../src/GenesisPresetBrowser.h"
 #include "../src/GenesisAudioEngine.h"
 #include <array>
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
 #include <cassert>
 #include <cmath>
 int main(){

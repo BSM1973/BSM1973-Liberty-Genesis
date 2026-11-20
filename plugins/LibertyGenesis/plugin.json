@@ -1,0 +1,17 @@
+{
+  "name": "Liberty Genesis",
+  "manufacturer": "Liberty Music Software",
+  "version": "0.1.0",
+  "format": "vst2",
+  "kind": "instrument",
+  "uid": "LGns",
+  "numInputs": 0,
+  "numOutputs": 2,
+  "category": "Synth",
+  "file32": "VST/liberty-genesis-arm32.so",
+  "file64": "VST/liberty-genesis-arm64.so",
+  "description": "Liberty Genesis: 16-voice synthesizer for MPC standalone",
+  "author": "Liberty Music Software",
+  "url": "https://libertymusicsoftware.com",
+  "license": "Proprietary"
+}

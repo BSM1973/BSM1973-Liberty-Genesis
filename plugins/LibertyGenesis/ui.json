@@ -1,0 +1,76 @@
+{
+  "kit": "mpc-red",
+  "pages": [
+    {
+      "name": "OSC",
+      "controls": [
+        {
+          "param": "Wave A",
+          "widget": "switch"
+        },
+        {
+          "param": "Wave B",
+          "widget": "switch"
+        },
+        {
+          "param": "Mix",
+          "widget": "knob"
+        },
+        {
+          "param": "Detune",
+          "widget": "knob"
+        },
+        {
+          "param": "Cutoff",
+          "widget": "knob"
+        },
+        {
+          "param": "Resonance",
+          "widget": "knob"
+        },
+        {
+          "param": "Volume",
+          "widget": "fader"
+        },
+        "empty"
+      ]
+    },
+    {
+      "name": "ENV",
+      "controls": [
+        {
+          "param": "Attack",
+          "widget": "fader"
+        },
+        {
+          "param": "Decay",
+          "widget": "fader"
+        },
+        {
+          "param": "Sustain",
+          "widget": "fader"
+        },
+        {
+          "param": "Release",
+          "widget": "fader"
+        },
+        {
+          "param": "LFO Rate",
+          "widget": "knob"
+        },
+        {
+          "param": "LFO Depth",
+          "widget": "knob"
+        },
+        "empty",
+        "empty"
+      ]
+    }
+  ],
+  "style": {
+    "background": "ff101c30",
+    "accent": "ffd6ae63",
+    "text": "ffffffff",
+    "muted": "ff9aaac1"
+  }
+}

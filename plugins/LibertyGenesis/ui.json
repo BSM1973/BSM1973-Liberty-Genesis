@@ -32,7 +32,9 @@
           "param": "Volume",
           "widget": "fader"
         },
-        "empty"
+        {
+          "widget": "empty"
+        }
       ]
     },
     {
@@ -62,8 +64,12 @@
           "param": "LFO Depth",
           "widget": "knob"
         },
-        "empty",
-        "empty"
+        {
+          "widget": "empty"
+        },
+        {
+          "widget": "empty"
+        }
       ]
     }
   ],

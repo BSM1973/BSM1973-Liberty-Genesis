@@ -1,0 +1,49 @@
+name: MPC SDK ARM Toolchain Verification
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/mpc-sdk-toolchain.yml'
+jobs:
+  sdk-arm32-arm64:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout official MPC SDK
+        uses: actions/checkout@v4
+        with:
+          repository: inmusic-software/mpc-plugin-builder-sdk
+          path: mpc-sdk
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build official SDK example for native and both ARM targets
+        working-directory: mpc-sdk
+        run: python tools/build.py examples/SimpleSynth
+      - name: Verify two ARM binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t arm32 < <(find mpc-sdk/examples/SimpleSynth/build -name '*-arm32.so' -type f)
+          mapfile -t arm64 < <(find mpc-sdk/examples/SimpleSynth/build -name '*-arm64.so' -type f)
+          test "${#arm32[@]}" -eq 1
+          test "${#arm64[@]}" -eq 1
+          file "${arm32[0]}" "${arm64[0]}"
+          file "${arm32[0]}" | grep -q 'ELF 32-bit'
+          file "${arm64[0]}" | grep -q 'ELF 64-bit'
+      - name: Archive SDK example (NOT Liberty Genesis)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          find mpc-sdk/examples/SimpleSynth/build -type d -name 'MPC SDK Examples - VST - Simple Synth' -print -quit | while read -r d; do
+            tar -czf artifacts/mpc-sdk-simplesynth-arm32-arm64.tar.gz -C "$(dirname "$d")" "$(basename "$d")"
+          done
+          test -s artifacts/mpc-sdk-simplesynth-arm32-arm64.tar.gz
+      - name: Upload SDK verification artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mpc-sdk-simplesynth-toolchain-check
+          path: artifacts/mpc-sdk-simplesynth-arm32-arm64.tar.gz
+          if-no-files-found: error

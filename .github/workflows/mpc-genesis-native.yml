@@ -1,0 +1,63 @@
+name: Liberty Genesis MPC Native ARM32 ARM64
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'plugins/LibertyGenesis/**'
+      - 'src/GenesisSynth.h'
+      - '.github/workflows/mpc-genesis-native.yml'
+jobs:
+  build-mpc:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 40
+    steps:
+      - name: Checkout Genesis
+        uses: actions/checkout@v4
+        with:
+          path: genesis
+      - name: Checkout MPC SDK
+        uses: actions/checkout@v4
+        with:
+          repository: inmusic-software/mpc-plugin-builder-sdk
+          path: mpc-sdk
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Genesis plugin in SDK workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p mpc-sdk/plugins/LibertyGenesis/src
+          cp genesis/plugins/LibertyGenesis/plugin.json mpc-sdk/plugins/LibertyGenesis/
+          cp genesis/plugins/LibertyGenesis/ui.json mpc-sdk/plugins/LibertyGenesis/
+          cp genesis/plugins/LibertyGenesis/src/*.cpp mpc-sdk/plugins/LibertyGenesis/src/
+          cp genesis/src/GenesisSynth.h mpc-sdk/plugins/LibertyGenesis/src/
+      - name: Build and validate MPC native plugin
+        working-directory: mpc-sdk
+        run: python tools/build.py plugins/LibertyGenesis
+      - name: Validate ARM binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          find mpc-sdk/plugins/LibertyGenesis/build -name '*-arm32.so' -type f -print | grep -q .
+          find mpc-sdk/plugins/LibertyGenesis/build -name '*-arm64.so' -type f -print | grep -q .
+          arm32="$(find mpc-sdk/plugins/LibertyGenesis/build -name '*-arm32.so' -type f -print -quit)"
+          arm64="$(find mpc-sdk/plugins/LibertyGenesis/build -name '*-arm64.so' -type f -print -quit)"
+          file "$arm32" | grep -q 'ELF 32-bit'
+          file "$arm64" | grep -q 'ELF 64-bit'
+      - name: Package MPC install folder
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          folder="$(find mpc-sdk/plugins/LibertyGenesis/build -mindepth 1 -maxdepth 1 -type d -name '* - VST - Liberty Genesis' -print -quit)"
+          test -n "$folder"
+          tar -czf artifacts/liberty-genesis-mpc-arm32-arm64.tar.gz -C "$(dirname "$folder")" "$(basename "$folder")"
+          test -s artifacts/liberty-genesis-mpc-arm32-arm64.tar.gz
+      - name: Upload MPC artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: liberty-genesis-mpc-arm32-arm64
+          path: artifacts/liberty-genesis-mpc-arm32-arm64.tar.gz
+          if-no-files-found: error

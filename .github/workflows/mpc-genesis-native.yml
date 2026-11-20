@@ -36,6 +36,9 @@ jobs:
       - name: Build and validate MPC native plugin
         working-directory: mpc-sdk
         run: python tools/build.py plugins/LibertyGenesis
+      - name: Strict SDK package validation
+        working-directory: mpc-sdk
+        run: python tools/validate.py plugins/LibertyGenesis --strict
       - name: Validate ARM binaries
         shell: bash
         run: |
@@ -53,11 +56,11 @@ jobs:
           mkdir -p artifacts
           folder="$(find mpc-sdk/plugins/LibertyGenesis/build -mindepth 1 -maxdepth 1 -type d -name '* - VST - Liberty Genesis' -print -quit)"
           test -n "$folder"
-          tar -czf artifacts/liberty-genesis-mpc-arm32-arm64.tar.gz -C "$(dirname "$folder")" "$(basename "$folder")"
-          test -s artifacts/liberty-genesis-mpc-arm32-arm64.tar.gz
+          (cd "$(dirname "$folder")" && zip -qr "$GITHUB_WORKSPACE/artifacts/liberty-genesis-mpc-arm32-arm64.zip" "$(basename "$folder")")
+          test -s artifacts/liberty-genesis-mpc-arm32-arm64.zip
       - name: Upload MPC artifact
         uses: actions/upload-artifact@v4
         with:
           name: liberty-genesis-mpc-arm32-arm64
-          path: artifacts/liberty-genesis-mpc-arm32-arm64.tar.gz
+          path: artifacts/liberty-genesis-mpc-arm32-arm64.zip
           if-no-files-found: error

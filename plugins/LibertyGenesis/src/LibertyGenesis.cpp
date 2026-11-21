@@ -1,6 +1,8 @@
 #include "mpc_plugin.h"
 #include "GenesisSynth.h"
 #include "GenesisFactory100.h"
+#include "GenesisChorus.h"
+#include <string_view>
 #include <algorithm>
 #include <array>
 
@@ -8,7 +10,7 @@ class LibertyGenesis final : public mpc::Plugin {
 public:
  enum Params { kWaveA, kWaveB, kMix, kDetune, kCutoff, kResonance,
                kVolume, kAttack, kDecay, kSustain, kRelease,
-               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter };
+               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter, kChorusMix, kChorusRate, kChorusDepth, kChorusWidth };
  static mpc::PluginInfo makeInfo() {
   mpc::PluginInfo i;
   i.name = "Liberty Genesis";
@@ -41,21 +43,27 @@ public:
   addParam(mpc::floatParam("macropunch","Macro Punch",0.f,100.f,50.f,"%",0));
   addParam(mpc::floatParam("sublevel","Sub Level",0.f,100.f,0.f,"%",0));
   addParam(mpc::floatParam("velfilter","Velocity Filter",0.f,100.f,0.f,"%",0));
+  addParam(mpc::floatParam("chorusmix","Chorus Mix",0.f,100.f,0.f,"%",0));
+  addParam(mpc::logParam("chorusrate","Chorus Rate",0.05f,5.f,0.35f,"Hz",2));
+  addParam(mpc::floatParam("chorusdepth","Chorus Depth",0.f,100.f,45.f,"%",0));
+  addParam(mpc::floatParam("choruswidth","Chorus Width",0.f,100.f,100.f,"%",0));
   // MPC native program browser: 100 categorized factory programs.
   for (const auto& preset : liberty::genesisFactory100) {
+   const std::string_view name(preset.name);
+   const float chorusMix=name.substr(0,3)=="PAD"?45.f:name.substr(0,4)=="POLY"?30.f:name.substr(0,4)=="KEYS"?20.f:0.f;
    std::vector<float> values = {
     static_cast<float>(preset.waveA), static_cast<float>(preset.waveB),
     preset.mix*100.f, preset.detune, preset.cutoff, preset.resonance*100.f,
     preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
     preset.sustain*100.f, preset.release*1000.f,
     preset.lfoRate, preset.lfoDepth*100.f,
-    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f
+    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f, chorusMix, 0.35f, 45.f, 100.f
    };
    addProgram(preset.name, std::move(values));
   }
  }
- void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); }
- void reset() override { synth_.allNotesOff(); }
+ void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); chorus_.prepare(sampleRate); }
+ void reset() override { synth_.allNotesOff(); chorus_.reset(); }
  void process(mpc::ProcessContext& ctx) override {
   if (ctx.numOutputs < 1 || !ctx.outputs || !ctx.outputs[0]) return;
   synth_.setWaveforms(static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveA)),
@@ -75,6 +83,7 @@ public:
   synth_.setGain(get(kVolume)*.01f);
   synth_.setADSR(get(kAttack)*.001f*std::pow(2.f,-punch*2.f),get(kDecay)*.001f,get(kSustain)*.01f,get(kRelease)*.001f);
   synth_.setLFO(get(kLfoRate),std::clamp(get(kLfoDepth)*.01f+motion*.5f,0.f,1.f));
+  chorus_.set(get(kChorusMix)*.01f,get(kChorusRate),get(kChorusDepth)*.01f,get(kChorusWidth)*.01f);
   float* left = ctx.outputs[0];
   float* right = ctx.numOutputs > 1 ? ctx.outputs[1] : nullptr;
   int pos = 0;
@@ -91,8 +100,9 @@ public:
  }
 private:
  void render(float* l,float* r,int begin,int end) {
-  for(int i=begin;i<end;++i) { const float s=synth_.processSample(); l[i]=s; if(r)r[i]=s; }
+  for(int i=begin;i<end;++i) { const float s=synth_.processSample(); float a,b; chorus_.process(s,a,b); l[i]=r?a:(a+b)*.5f; if(r)r[i]=b; }
  }
  liberty::GenesisSynth synth_{};
+ liberty::GenesisChorus chorus_{};
 };
 MPC_PLUGIN_ENTRY(LibertyGenesis)

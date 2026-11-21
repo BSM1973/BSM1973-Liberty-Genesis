@@ -5,6 +5,7 @@ on:
     paths:
       - 'plugins/LibertyGenesis/**'
       - 'src/GenesisSynth.h'
+      - 'src/GenesisPresets.h'
       - '.github/workflows/mpc-genesis-native.yml'
 jobs:
   build-mpc:
@@ -33,6 +34,7 @@ jobs:
           cp genesis/plugins/LibertyGenesis/ui.json mpc-sdk/plugins/LibertyGenesis/
           cp genesis/plugins/LibertyGenesis/src/*.cpp mpc-sdk/plugins/LibertyGenesis/src/
           cp genesis/src/GenesisSynth.h mpc-sdk/plugins/LibertyGenesis/src/
+          cp genesis/src/GenesisPresets.h mpc-sdk/plugins/LibertyGenesis/src/
       - name: Build and validate MPC native plugin
         working-directory: mpc-sdk
         run: python tools/build.py plugins/LibertyGenesis

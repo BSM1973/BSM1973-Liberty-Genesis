@@ -495,6 +495,637 @@
           "widget": "switch"
         }
       ]
+    },
+    {
+      "name": "MATRIX 1",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "1 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "1 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "1 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "1 POLARITY"
+        },
+        {
+          "param": "M1 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M1 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M1 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M1 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "2 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "2 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "2 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "2 POLARITY"
+        },
+        {
+          "param": "M2 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M2 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M2 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M2 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MATRIX 2",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "3 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "3 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "3 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "3 POLARITY"
+        },
+        {
+          "param": "M3 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M3 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M3 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M3 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "4 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "4 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "4 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "4 POLARITY"
+        },
+        {
+          "param": "M4 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M4 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M4 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M4 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MATRIX 3",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "5 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "5 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "5 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "5 POLARITY"
+        },
+        {
+          "param": "M5 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M5 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M5 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M5 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "6 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "6 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "6 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "6 POLARITY"
+        },
+        {
+          "param": "M6 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M6 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M6 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M6 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MATRIX 4",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "7 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "7 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "7 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "7 POLARITY"
+        },
+        {
+          "param": "M7 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M7 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M7 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M7 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "8 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "8 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "8 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "8 POLARITY"
+        },
+        {
+          "param": "M8 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M8 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M8 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M8 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MATRIX 5",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "9 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "9 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "9 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "9 POLARITY"
+        },
+        {
+          "param": "M9 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M9 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M9 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M9 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "10 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "10 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "10 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "10 POLARITY"
+        },
+        {
+          "param": "M10 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M10 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M10 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M10 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MATRIX 6",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "11 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "11 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "11 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "11 POLARITY"
+        },
+        {
+          "param": "M11 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M11 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M11 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M11 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "12 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "12 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "12 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "12 POLARITY"
+        },
+        {
+          "param": "M12 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M12 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M12 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M12 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MATRIX 7",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "13 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "13 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "13 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "13 POLARITY"
+        },
+        {
+          "param": "M13 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M13 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M13 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M13 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "14 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "14 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "14 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "14 POLARITY"
+        },
+        {
+          "param": "M14 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M14 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M14 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M14 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MATRIX 8",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "15 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "15 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "15 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "15 POLARITY"
+        },
+        {
+          "param": "M15 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M15 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M15 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M15 Polarity",
+          "widget": "switch"
+        },
+        {
+          "widget": "text",
+          "text": "16 SOURCE"
+        },
+        {
+          "widget": "text",
+          "text": "16 DEST"
+        },
+        {
+          "widget": "text",
+          "text": "16 AMOUNT"
+        },
+        {
+          "widget": "text",
+          "text": "16 POLARITY"
+        },
+        {
+          "param": "M16 Source",
+          "widget": "switch"
+        },
+        {
+          "param": "M16 Dest",
+          "widget": "switch"
+        },
+        {
+          "param": "M16 Amount",
+          "widget": "knob",
+          "polarity": "bipolar"
+        },
+        {
+          "param": "M16 Polarity",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "MOD ENV",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "ATTACK"
+        },
+        {
+          "widget": "text",
+          "text": "DECAY"
+        },
+        {
+          "widget": "text",
+          "text": "SUSTAIN"
+        },
+        {
+          "widget": "text",
+          "text": "RELEASE"
+        },
+        {
+          "param": "Mod Attack",
+          "widget": "fader"
+        },
+        {
+          "param": "Mod Decay",
+          "widget": "fader"
+        },
+        {
+          "param": "Mod Sustain",
+          "widget": "fader"
+        },
+        {
+          "param": "Mod Release",
+          "widget": "fader"
+        },
+        {
+          "widget": "text",
+          "text": "LFO 2"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "param": "LFO 2 Rate",
+          "widget": "knob"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "widget": "empty"
+        }
+      ]
     }
   ]
 }

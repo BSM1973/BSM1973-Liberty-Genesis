@@ -12,7 +12,7 @@ class LibertyGenesis final : public mpc::Plugin {
 public:
  enum Params { kWaveA, kWaveB, kMix, kDetune, kCutoff, kResonance,
                kVolume, kAttack, kDecay, kSustain, kRelease,
-               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter, kChorusMix, kChorusRate, kChorusDepth, kChorusWidth, kDelayMix, kDelayTime, kDelaySync, kDelayFeedback, kDelayStereo, kDelayTone, kReverbMode, kReverbMix, kReverbPre, kReverbDecay, kReverbDamp, kReverbWidth, kPulse, kPWM, kFM, kRing, kNoise, kSync, kOctA, kSemiA, kOctB, kSemiB };
+               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter, kChorusMix, kChorusRate, kChorusDepth, kChorusWidth, kDelayMix, kDelayTime, kDelaySync, kDelayFeedback, kDelayStereo, kDelayTone, kReverbMode, kReverbMix, kReverbPre, kReverbDecay, kReverbDamp, kReverbWidth, kPulse, kPWM, kFM, kRing, kNoise, kSync, kOctA, kSemiA, kOctB, kSemiB, kUniCount, kUniDetune, kUniWidth, kUniBlend, kUniPhase, kUniEco };
  static mpc::PluginInfo makeInfo() {
   mpc::PluginInfo i;
   i.name = "Liberty Genesis";
@@ -71,6 +71,12 @@ public:
   addParam(mpc::choiceParam("semia","Semi A",{"-12","-11","-10","-9","-8","-7","-6","-5","-4","-3","-2","-1","0","1","2","3","4","5","6","7","8","9","10","11","12"},12));
   addParam(mpc::choiceParam("octaveb","Octave B",{"-2","-1","0","1","2"},2));
   addParam(mpc::choiceParam("semib","Semi B",{"-12","-11","-10","-9","-8","-7","-6","-5","-4","-3","-2","-1","0","1","2","3","4","5","6","7","8","9","10","11","12"},12));
+  addParam(mpc::choiceParam("unicount","Unison Count",{"1","2","3","5","7"},0));
+  addParam(mpc::floatParam("unidetune","Uni Detune",0.f,60.f,18.f,"ct",0));
+  addParam(mpc::floatParam("uniwidth","Uni Width",0.f,100.f,100.f,"%",0));
+  addParam(mpc::floatParam("uniblend","Uni Blend",0.f,100.f,50.f,"%",0));
+  addParam(mpc::choiceParam("uniphase","Uni Phase",{"Reset","Spread","Random"},1));
+  addParam(mpc::choiceParam("unieco","Uni CPU",{"Full","Eco"},1));
   // MPC native program browser: 100 categorized factory programs.
   for (const auto& preset : liberty::genesisFactory100) {
    const std::string_view name(preset.name);
@@ -81,7 +87,7 @@ public:
     preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
     preset.sustain*100.f, preset.release*1000.f,
     preset.lfoRate, preset.lfoDepth*100.f,
-    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f, chorusMix, 0.35f, 45.f, 100.f, 0.f, 350.f, 0.f, 32.f, 75.f, 55.f, 2.f, name.substr(0,3)=="PAD"?25.f:0.f, 20.f, 2.5f, 45.f, 100.f, 50.f, 0.f, 0.f, 0.f, 0.f, 0.f, 2.f, 12.f, 2.f, 12.f
+    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f, chorusMix, 0.35f, 45.f, 100.f, 0.f, 350.f, 0.f, 32.f, 75.f, 55.f, 2.f, name.substr(0,3)=="PAD"?25.f:0.f, 20.f, 2.5f, 45.f, 100.f, 50.f, 0.f, 0.f, 0.f, 0.f, 0.f, 2.f, 12.f, 2.f, 12.f, 0.f, 18.f, 100.f, 50.f, 1.f, 1.f
    };
    addProgram(preset.name, std::move(values));
   }
@@ -93,6 +99,8 @@ public:
   synth_.setWaveforms(static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveA)),
                       static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveB)));
   synth_.setAdvanced(get(kPulse)*.01f,get(kPWM)*.01f,get(kFM)*.01f,get(kRing)*.01f,get(kNoise)*.01f,getInt(kSync)!=0,getInt(kOctA)-2,getInt(kSemiA)-12,getInt(kOctB)-2,getInt(kSemiB)-12);
+  constexpr int uniCounts[]={1,2,3,5,7};
+  synth_.setUnison(uniCounts[std::clamp(getInt(kUniCount),0,4)],get(kUniDetune),get(kUniWidth)*.01f,get(kUniBlend)*.01f,getInt(kUniPhase),getInt(kUniEco)!=0);
   synth_.setOscMix(get(kMix)*.01f);
   synth_.setSubLevel(get(kSubLevel)*.01f);
   synth_.setVelocityFilter(get(kVelocityFilter)*.01f);
@@ -130,7 +138,7 @@ public:
  }
 private:
  void render(float* l,float* r,int begin,int end) {
-  for(int i=begin;i<end;++i) { const float s=synth_.processSample(); float a,b; chorus_.process(s,a,b); delay_.process(a,b); reverb_.process(a,b); l[i]=r?a:(a+b)*.5f; if(r)r[i]=b; }
+  for(int i=begin;i<end;++i) { float dryL,dryR,a,b; synth_.processStereo(dryL,dryR); chorus_.processStereo(dryL,dryR,a,b); delay_.process(a,b); reverb_.process(a,b); l[i]=r?a:(a+b)*.5f; if(r)r[i]=b; }
  }
  liberty::GenesisSynth synth_{};
  liberty::GenesisChorus chorus_{};

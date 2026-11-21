@@ -270,6 +270,51 @@
           "widget": "knob"
         }
       ]
+    },
+    {
+      "name": "REVERB",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "MODE"
+        },
+        {
+          "widget": "text",
+          "text": "MIX"
+        },
+        {
+          "widget": "text",
+          "text": "PRE DELAY"
+        },
+        {
+          "widget": "text",
+          "text": "DECAY"
+        },
+        {
+          "param": "Reverb Mode",
+          "widget": "switch"
+        },
+        {
+          "param": "Reverb Mix",
+          "widget": "knob"
+        },
+        {
+          "param": "Pre Delay",
+          "widget": "knob"
+        },
+        {
+          "param": "Decay Time",
+          "widget": "knob"
+        },
+        {
+          "param": "Damping",
+          "widget": "knob"
+        },
+        {
+          "param": "Reverb Width",
+          "widget": "knob"
+        }
+      ]
     }
   ]
 }

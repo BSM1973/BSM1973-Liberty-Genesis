@@ -1,5 +1,6 @@
 #include "mpc_plugin.h"
 #include "GenesisSynth.h"
+#include "GenesisPresets.h"
 #include <algorithm>
 #include <array>
 
@@ -33,6 +34,17 @@ public:
   addParam(mpc::logParam("release","Release",1.f,20000.f,180.f,"ms",0));
   addParam(mpc::logParam("lforate","LFO Rate",0.05f,20.f,0.5f,"Hz",2));
   addParam(mpc::floatParam("lfodepth","LFO Depth",0.f,100.f,0.f,"%",0));
+  // Register the existing 12 factory presets as real MPC host programs.
+  for (const auto& preset : liberty::factoryPresets) {
+   std::vector<float> values = {
+    static_cast<float>(preset.oscillatorA), static_cast<float>(preset.oscillatorB),
+    preset.mix*100.f, preset.detune, preset.cutoff, preset.resonance*100.f,
+    preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
+    preset.sustain*100.f, preset.release*1000.f,
+    preset.lfoRate, preset.lfoDepth*100.f
+   };
+   addProgram(std::string(preset.name), std::move(values));
+  }
  }
  void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); }
  void reset() override { synth_.allNotesOff(); }

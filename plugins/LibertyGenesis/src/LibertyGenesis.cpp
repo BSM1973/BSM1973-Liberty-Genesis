@@ -43,7 +43,7 @@ public:
     preset.sustain*100.f, preset.release*1000.f,
     preset.lfoRate, preset.lfoDepth*100.f
    };
-   addProgram(std::string(preset.name), std::move(values));
+   addProgram(preset.name.data(), std::move(values));
   }
  }
  void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); }

@@ -78,6 +78,7 @@ public:
   addParam(mpc::choiceParam("uniphase","Uni Phase",{"Reset","Spread","Random"},1));
   addParam(mpc::choiceParam("unieco","Uni CPU",{"Full","Eco"},1));
   // MPC native program browser: 100 categorized factory programs.
+  int programIndex=0;
   for (const auto& preset : liberty::genesisFactory100) {
    const std::string_view name(preset.name);
    const float chorusMix=name.substr(0,3)=="PAD"?45.f:name.substr(0,4)=="POLY"?30.f:name.substr(0,4)=="KEYS"?20.f:0.f;
@@ -89,6 +90,34 @@ public:
     preset.lfoRate, preset.lfoDepth*100.f,
     preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f, chorusMix, 0.35f, 45.f, 100.f, 0.f, 350.f, 0.f, 32.f, 75.f, 55.f, 2.f, name.substr(0,3)=="PAD"?25.f:0.f, 20.f, 2.5f, 45.f, 100.f, 50.f, 0.f, 0.f, 0.f, 0.f, 0.f, 2.f, 12.f, 2.f, 12.f, 0.f, 18.f, 100.f, 50.f, 1.f, 1.f
    };
+   // Category-specific sound design, with per-program variation.
+   const int v=programIndex++%10;
+   const bool bass=name.substr(0,4)=="BASS", lead=name.substr(0,4)=="LEAD", pad=name.substr(0,3)=="PAD", keys=name.substr(0,4)=="KEYS", pluck=name.substr(0,5)=="PLUCK", arp=name.substr(0,3)=="ARP", tex=name.substr(0,7)=="TEXTURE", brass=name.substr(0,5)=="BRASS", fx=name.substr(0,2)=="FX", poly=name.substr(0,4)=="POLY";
+   values[kSubLevel]=bass?float(25+v*5):lead?12.f:0.f;
+   values[kVelocityFilter]=keys||pluck||brass?float(25+v*5):15.f;
+   values[kMacroTone]=float(45+v%4*4);
+   values[kMacroMotion]=pad||tex?float(55+v*2):50.f;
+   values[kMacroPunch]=bass||pluck?float(55+v*2):50.f;
+   values[kPulse]=float(30+v*4);
+   values[kPWM]=pad||brass||poly?float(15+v*5):0.f;
+   values[kFM]=keys||fx||tex?float(5+v*6):lead&&v%3==0?20.f:0.f;
+   values[kRing]=fx||tex?float(v*5):0.f;
+   values[kNoise]=tex||fx?float(8+v*4):brass?5.f:0.f;
+   values[kSync]=lead&&v%3==1?1.f:0.f;
+   values[kOctB]=bass&&v%2==0?1.f:2.f;
+   values[kSemiB]=tex&&v%3==0?19.f:12.f;
+   values[kUniCount]=pad||poly||lead||tex?float(2+v%3):0.f;
+   values[kUniDetune]=float(8+v*4);
+   values[kUniWidth]=bass?0.f:float(65+v*3);
+   values[kUniBlend]=float(30+v*4);
+   values[kUniPhase]=pad||tex?2.f:1.f;
+   values[kDelayMix]=arp||lead||pluck||tex?float(12+v*3):0.f;
+   values[kDelaySync]=float(1+v%6);
+   values[kDelayFeedback]=float(20+v*4);
+   values[kReverbMode]=pad?2.f:tex||fx?3.f:keys||lead?1.f:0.f;
+   values[kReverbMix]=bass?0.f:float((pad||tex?25:8)+v*3);
+   values[kReverbDecay]=pad||tex?float(3.+v*.65):float(.5+v*.22);
+   if(pad||poly||lead||tex)values[kVolume]*=.8f;
    addProgram(preset.name, std::move(values));
   }
  }

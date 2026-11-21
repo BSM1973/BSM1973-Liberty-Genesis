@@ -12,7 +12,7 @@ class LibertyGenesis final : public mpc::Plugin {
 public:
  enum Params { kWaveA, kWaveB, kMix, kDetune, kCutoff, kResonance,
                kVolume, kAttack, kDecay, kSustain, kRelease,
-               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter, kChorusMix, kChorusRate, kChorusDepth, kChorusWidth, kDelayMix, kDelayTime, kDelaySync, kDelayFeedback, kDelayStereo, kDelayTone, kReverbMode, kReverbMix, kReverbPre, kReverbDecay, kReverbDamp, kReverbWidth, kPulse, kPWM, kFM, kRing, kNoise, kSync, kOctA, kSemiA, kOctB, kSemiB, kUniCount, kUniDetune, kUniWidth, kUniBlend, kUniPhase, kUniEco };
+               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter, kChorusMix, kChorusRate, kChorusDepth, kChorusWidth, kDelayMix, kDelayTime, kDelaySync, kDelayFeedback, kDelayStereo, kDelayTone, kReverbMode, kReverbMix, kReverbPre, kReverbDecay, kReverbDamp, kReverbWidth, kPulse, kPWM, kFM, kRing, kNoise, kSync, kOctA, kSemiA, kOctB, kSemiB, kUniCount, kUniDetune, kUniWidth, kUniBlend, kUniPhase, kUniEco, kArpOn, kArpMode, kArpRate, kArpOct, kArpGate, kArpSwing, kArpVel, kArpHold };
  static mpc::PluginInfo makeInfo() {
   mpc::PluginInfo i;
   i.name = "Liberty Genesis";
@@ -77,6 +77,14 @@ public:
   addParam(mpc::floatParam("uniblend","Uni Blend",0.f,100.f,50.f,"%",0));
   addParam(mpc::choiceParam("uniphase","Uni Phase",{"Reset","Spread","Random"},1));
   addParam(mpc::choiceParam("unieco","Uni CPU",{"Full","Eco"},1));
+  addParam(mpc::choiceParam("arpon","Arp On",{"Off","On"},0));
+  addParam(mpc::choiceParam("arpmode","Arp Mode",{"Up","Down","Up Down","Random","Order"},0));
+  addParam(mpc::choiceParam("arprate","Arp Rate",{"1/4","1/8","1/16","1/32","1/8 T","1/16 T","1/8 D","1/16 D"},2));
+  addParam(mpc::choiceParam("arpoct","Arp Octaves",{"1","2","3","4"},0));
+  addParam(mpc::floatParam("arpgate","Arp Gate",5.f,100.f,65.f,"%",0));
+  addParam(mpc::floatParam("arpswing","Arp Swing",0.f,75.f,0.f,"%",0));
+  addParam(mpc::floatParam("arpvel","Arp Velocity",1.f,127.f,100.f,"",0));
+  addParam(mpc::choiceParam("arphold","Arp Hold",{"Off","On"},0));
   // MPC native program browser: 100 categorized factory programs.
   int programIndex=0;
   for (const auto& preset : liberty::genesisFactory100) {
@@ -118,11 +126,12 @@ public:
    values[kReverbMix]=bass?0.f:float((pad||tex?25:8)+v*3);
    values[kReverbDecay]=pad||tex?float(3.+v*.65):float(.5+v*.22);
    if(pad||poly||lead||tex)values[kVolume]*=.8f;
+   values.insert(values.end(),{arp?1.f:0.f,float(v%5),float(1+v%7),float(v%3),float(40+v*5),float(v%4*10),100.f,0.f});
    addProgram(preset.name, std::move(values));
   }
  }
- void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); chorus_.prepare(sampleRate); delay_.prepare(sampleRate); reverb_.prepare(sampleRate); }
- void reset() override { synth_.allNotesOff(); chorus_.reset(); delay_.reset(); reverb_.reset(); }
+ void prepare(double sampleRate, int) override { arpSR=sampleRate; synth_.setSampleRate(sampleRate); synth_.allNotesOff(); chorus_.prepare(sampleRate); delay_.prepare(sampleRate); reverb_.prepare(sampleRate); }
+ void reset() override { clearArp(); synth_.allNotesOff(); chorus_.reset(); delay_.reset(); reverb_.reset(); }
  void process(mpc::ProcessContext& ctx) override {
   if (ctx.numOutputs < 1 || !ctx.outputs || !ctx.outputs[0]) return;
   synth_.setWaveforms(static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveA)),
@@ -151,6 +160,15 @@ public:
   const double bpm=ctx.transport.tempoValid&&std::isfinite(ctx.transport.bpm)?std::clamp(ctx.transport.bpm,40.,300.):120.;
   delay_.set(get(kDelayMix)*.01f,sync?beats[sync]*60./bpm:get(kDelayTime)*.001,get(kDelayFeedback)*.01f,get(kDelayStereo)*.01f,get(kDelayTone)*.01f);
   reverb_.set(getInt(kReverbMode),get(kReverbMix)*.01f,get(kReverbPre),get(kReverbDecay),get(kReverbDamp)*.01f,get(kReverbWidth)*.01f);
+  const bool nextArp=getInt(kArpOn)!=0;
+  if(nextArp!=arpEnabled){synth_.allNotesOff();clearArp();arpEnabled=nextArp;}
+  arpMode=getInt(kArpMode);arpOct=1+getInt(kArpOct);
+  constexpr double divisions[]={1.,.5,.25,.125,1./3.,1./6.,.75,.375};
+  arpPeriod=arpSR*60./bpm*divisions[std::clamp(getInt(kArpRate),0,7)];
+  arpGate=get(kArpGate)*.01;arpSwing=get(kArpSwing)*.01;arpVelocity=get(kArpVel)/127.f;
+  const bool nextHold=getInt(kArpHold)!=0;
+  if(arpHold&&!nextHold){for(int n=0;n<128;++n)if(!physical[n])held[n]=false;rebuildArp();}
+  arpHold=nextHold;
   float* left = ctx.outputs[0];
   float* right = ctx.numOutputs > 1 ? ctx.outputs[1] : nullptr;
   int pos = 0;
@@ -159,15 +177,45 @@ public:
    const int offset=std::clamp(ev.sampleOffset,pos,ctx.numFrames);
    render(left,right,pos,offset);
    pos=offset;
-   if(ev.isNoteOn()) synth_.noteOn(ev.note(),ev.velocity()/127.f);
-   else if(ev.isNoteOff()) synth_.noteOff(ev.note());
-   else if(ev.isAllNotesOff()) synth_.allNotesOff();
+   if(ev.isNoteOn()){if(arpEnabled)arpNote(ev.note(),true);else synth_.noteOn(ev.note(),ev.velocity()/127.f);}
+   else if(ev.isNoteOff()){if(arpEnabled)arpNote(ev.note(),false);else synth_.noteOff(ev.note());}
+   else if(ev.isAllNotesOff()){clearArp();synth_.allNotesOff();}
   }
   render(left,right,pos,ctx.numFrames);
  }
 private:
+ double arpSR=48000.,arpPeriod=6000.,arpGate=.65,arpSwing=0.,untilStep=0.,untilOff=0.;
+ bool arpEnabled=false,arpHold=false;
+ int arpMode=0,arpOct=1,arpSound=-1,arpStep=0,nHeld=0;
+ float arpVelocity=.8f;
+ std::array<bool,128> held{},physical{};
+ std::array<unsigned,128> order{};
+ std::array<int,128> notes{};
+ unsigned serial=0,rngArp=1234567;
+ void clearArp(){if(arpSound>=0)synth_.noteOff(arpSound);arpSound=-1;held.fill(false);physical.fill(false);nHeld=arpStep=0;untilStep=untilOff=0.;}
+ void rebuildArp(){nHeld=0;for(int n=0;n<128;++n)if(held[n])notes[nHeld++]=n;if(!nHeld){if(arpSound>=0)synth_.noteOff(arpSound);arpSound=-1;untilStep=0.;arpStep=0;}}
+ void arpNote(int n,bool on){if(n<0||n>=128)return;if(on){if(arpHold&&std::none_of(physical.begin(),physical.end(),[](bool b){return b;}))held.fill(false);physical[n]=held[n]=true;order[n]=++serial;}else{physical[n]=false;if(!arpHold)held[n]=false;}rebuildArp();}
+ void arpTick(){
+  if(!nHeld)return;
+  if(arpSound>=0&&untilOff<=0.){synth_.noteOff(arpSound);arpSound=-1;}
+  if(untilStep<=0.){
+   if(arpSound>=0)synth_.noteOff(arpSound);
+   const int total=nHeld*arpOct;int idx=arpStep%total;
+   if(arpMode==1)idx=total-1-idx;
+   if(arpMode==2&&total>1){const int cycle=2*total-2;idx=arpStep%cycle;if(idx>=total)idx=cycle-idx;}
+   if(arpMode==3){rngArp^=rngArp<<13;rngArp^=rngArp>>17;rngArp^=rngArp<<5;idx=int(rngArp%unsigned(total));}
+   int note=notes[idx%nHeld];
+   if(arpMode==4){int rank=idx%nHeld;for(int j=0;j<nHeld;++j){int smaller=0;for(int k=0;k<nHeld;++k)if(order[notes[k]]<order[notes[j]])++smaller;if(smaller==rank){note=notes[j];break;}}}
+   arpSound=std::clamp(note+12*(idx/nHeld),0,127);
+   synth_.noteOn(arpSound,arpVelocity);
+   const double duration=std::max(1.,arpPeriod*(1.+(arpStep%2?-1.:1.)*arpSwing*.5));
+   untilStep+=duration;untilOff=duration*arpGate;
+   arpStep=(arpStep+1)%1000000;
+  }
+  --untilStep;--untilOff;
+ }
  void render(float* l,float* r,int begin,int end) {
-  for(int i=begin;i<end;++i) { float dryL,dryR,a,b; synth_.processStereo(dryL,dryR); chorus_.processStereo(dryL,dryR,a,b); delay_.process(a,b); reverb_.process(a,b); l[i]=r?a:(a+b)*.5f; if(r)r[i]=b; }
+  for(int i=begin;i<end;++i) { if(arpEnabled)arpTick(); float dryL,dryR,a,b; synth_.processStereo(dryL,dryR); chorus_.processStereo(dryL,dryR,a,b); delay_.process(a,b); reverb_.process(a,b); l[i]=r?a:(a+b)*.5f; if(r)r[i]=b; }
  }
  liberty::GenesisSynth synth_{};
  liberty::GenesisChorus chorus_{};

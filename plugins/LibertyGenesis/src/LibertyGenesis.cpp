@@ -1,6 +1,6 @@
 #include "mpc_plugin.h"
 #include "GenesisSynth.h"
-#include "GenesisPresets.h"
+#include "GenesisFactory100.h"
 #include <algorithm>
 #include <array>
 
@@ -39,16 +39,17 @@ public:
   addParam(mpc::floatParam("macrotone","Macro Tone",0.f,100.f,50.f,"%",0));
   addParam(mpc::floatParam("macromotion","Macro Motion",0.f,100.f,50.f,"%",0));
   addParam(mpc::floatParam("macropunch","Macro Punch",0.f,100.f,50.f,"%",0));
-  // Register the existing 12 factory presets as real MPC host programs.
-  for (const auto& preset : liberty::factoryPresets) {
+  // MPC native program browser: 100 categorized factory programs.
+  for (const auto& preset : liberty::genesisFactory100) {
    std::vector<float> values = {
-    static_cast<float>(preset.oscillatorA), static_cast<float>(preset.oscillatorB),
+    static_cast<float>(preset.waveA), static_cast<float>(preset.waveB),
     preset.mix*100.f, preset.detune, preset.cutoff, preset.resonance*100.f,
     preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
     preset.sustain*100.f, preset.release*1000.f,
-    preset.lfoRate, preset.lfoDepth*100.f, 0.f, 0.f, 50.f, 50.f, 50.f
+    preset.lfoRate, preset.lfoDepth*100.f,
+    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f
    };
-   addProgram(preset.name.data(), std::move(values));
+   addProgram(preset.name, std::move(values));
   }
  }
  void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); }

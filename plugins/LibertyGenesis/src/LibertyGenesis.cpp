@@ -8,7 +8,7 @@ class LibertyGenesis final : public mpc::Plugin {
 public:
  enum Params { kWaveA, kWaveB, kMix, kDetune, kCutoff, kResonance,
                kVolume, kAttack, kDecay, kSustain, kRelease,
-               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch };
+               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter };
  static mpc::PluginInfo makeInfo() {
   mpc::PluginInfo i;
   i.name = "Liberty Genesis";
@@ -39,6 +39,8 @@ public:
   addParam(mpc::floatParam("macrotone","Macro Tone",0.f,100.f,50.f,"%",0));
   addParam(mpc::floatParam("macromotion","Macro Motion",0.f,100.f,50.f,"%",0));
   addParam(mpc::floatParam("macropunch","Macro Punch",0.f,100.f,50.f,"%",0));
+  addParam(mpc::floatParam("sublevel","Sub Level",0.f,100.f,0.f,"%",0));
+  addParam(mpc::floatParam("velfilter","Velocity Filter",0.f,100.f,0.f,"%",0));
   // MPC native program browser: 100 categorized factory programs.
   for (const auto& preset : liberty::genesisFactory100) {
    std::vector<float> values = {
@@ -47,7 +49,7 @@ public:
     preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
     preset.sustain*100.f, preset.release*1000.f,
     preset.lfoRate, preset.lfoDepth*100.f,
-    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f
+    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f
    };
    addProgram(preset.name, std::move(values));
   }
@@ -59,6 +61,8 @@ public:
   synth_.setWaveforms(static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveA)),
                       static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveB)));
   synth_.setOscMix(get(kMix)*.01f);
+  synth_.setSubLevel(get(kSubLevel)*.01f);
+  synth_.setVelocityFilter(get(kVelocityFilter)*.01f);
   synth_.setDetuneCents(get(kDetune));
   // Neutral macro values (50%) preserve all legacy preset sounds.
   const float tone=(get(kMacroTone)-50.f)*.01f;

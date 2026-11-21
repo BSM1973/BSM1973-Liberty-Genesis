@@ -397,6 +397,51 @@
           "widget": "knob"
         }
       ]
+    },
+    {
+      "name": "UNISON",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "COUNT"
+        },
+        {
+          "widget": "text",
+          "text": "DETUNE"
+        },
+        {
+          "widget": "text",
+          "text": "WIDTH"
+        },
+        {
+          "widget": "text",
+          "text": "BLEND"
+        },
+        {
+          "param": "Unison Count",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Detune",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Width",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Blend",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Phase",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni CPU",
+          "widget": "switch"
+        }
+      ]
     }
   ]
 }

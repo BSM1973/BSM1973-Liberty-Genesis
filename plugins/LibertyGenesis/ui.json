@@ -442,6 +442,59 @@
           "widget": "switch"
         }
       ]
+    },
+    {
+      "name": "ARP",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "ENABLE"
+        },
+        {
+          "widget": "text",
+          "text": "MODE"
+        },
+        {
+          "widget": "text",
+          "text": "RATE"
+        },
+        {
+          "widget": "text",
+          "text": "OCTAVES"
+        },
+        {
+          "param": "Arp On",
+          "widget": "switch"
+        },
+        {
+          "param": "Arp Mode",
+          "widget": "knob"
+        },
+        {
+          "param": "Arp Rate",
+          "widget": "knob"
+        },
+        {
+          "param": "Arp Octaves",
+          "widget": "knob"
+        },
+        {
+          "param": "Arp Gate",
+          "widget": "knob"
+        },
+        {
+          "param": "Arp Swing",
+          "widget": "knob"
+        },
+        {
+          "param": "Arp Velocity",
+          "widget": "knob"
+        },
+        {
+          "param": "Arp Hold",
+          "widget": "switch"
+        }
+      ]
     }
   ]
 }

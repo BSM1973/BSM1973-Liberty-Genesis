@@ -37,6 +37,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Audit all interface pages and parameter mappings
+        run: python genesis/tests/audit_ui.py
       - name: Install Genesis plugin in SDK workspace
         shell: bash
         run: |

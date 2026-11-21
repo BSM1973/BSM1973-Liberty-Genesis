@@ -8,7 +8,7 @@ class LibertyGenesis final : public mpc::Plugin {
 public:
  enum Params { kWaveA, kWaveB, kMix, kDetune, kCutoff, kResonance,
                kVolume, kAttack, kDecay, kSustain, kRelease,
-               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive };
+               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch };
  static mpc::PluginInfo makeInfo() {
   mpc::PluginInfo i;
   i.name = "Liberty Genesis";
@@ -36,6 +36,9 @@ public:
   addParam(mpc::floatParam("lfodepth","LFO Depth",0.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("filtermode","Filter Mode",{"Low Pass","Band Pass","High Pass"},0));
   addParam(mpc::floatParam("filterdrive","Filter Drive",0.f,100.f,0.f,"%",0));
+  addParam(mpc::floatParam("macrotone","Macro Tone",0.f,100.f,50.f,"%",0));
+  addParam(mpc::floatParam("macromotion","Macro Motion",0.f,100.f,50.f,"%",0));
+  addParam(mpc::floatParam("macropunch","Macro Punch",0.f,100.f,50.f,"%",0));
   // Register the existing 12 factory presets as real MPC host programs.
   for (const auto& preset : liberty::factoryPresets) {
    std::vector<float> values = {
@@ -43,7 +46,7 @@ public:
     preset.mix*100.f, preset.detune, preset.cutoff, preset.resonance*100.f,
     preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
     preset.sustain*100.f, preset.release*1000.f,
-    preset.lfoRate, preset.lfoDepth*100.f, 0.f, 0.f
+    preset.lfoRate, preset.lfoDepth*100.f, 0.f, 0.f, 50.f, 50.f, 50.f
    };
    addProgram(preset.name.data(), std::move(values));
   }
@@ -56,12 +59,17 @@ public:
                       static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveB)));
   synth_.setOscMix(get(kMix)*.01f);
   synth_.setDetuneCents(get(kDetune));
-  synth_.setFilter(get(kCutoff),get(kResonance)*.01f);
+  // Neutral macro values (50%) preserve all legacy preset sounds.
+  const float tone=(get(kMacroTone)-50.f)*.01f;
+  const float motion=(get(kMacroMotion)-50.f)*.01f;
+  const float punch=(get(kMacroPunch)-50.f)*.01f;
+  const float cutoff=std::clamp(get(kCutoff)*std::pow(2.f,tone*4.f),20.f,18000.f);
+  synth_.setFilter(cutoff,get(kResonance)*.01f);
   synth_.setFilterMode(static_cast<liberty::GenesisSynth::FilterMode>(getInt(kFilterMode)));
-  synth_.setFilterDrive(get(kFilterDrive)*.01f);
+  synth_.setFilterDrive(std::clamp(get(kFilterDrive)*.01f+std::max(0.f,punch)*.7f,0.f,1.f));
   synth_.setGain(get(kVolume)*.01f);
-  synth_.setADSR(get(kAttack)*.001f,get(kDecay)*.001f,get(kSustain)*.01f,get(kRelease)*.001f);
-  synth_.setLFO(get(kLfoRate),get(kLfoDepth)*.01f);
+  synth_.setADSR(get(kAttack)*.001f*std::pow(2.f,-punch*2.f),get(kDecay)*.001f,get(kSustain)*.01f,get(kRelease)*.001f);
+  synth_.setLFO(get(kLfoRate),std::clamp(get(kLfoDepth)*.01f+motion*.5f,0.f,1.f));
   float* left = ctx.outputs[0];
   float* right = ctx.numOutputs > 1 ? ctx.outputs[1] : nullptr;
   int pos = 0;

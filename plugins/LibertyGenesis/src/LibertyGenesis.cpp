@@ -2,6 +2,7 @@
 #include "GenesisSynth.h"
 #include "GenesisFactory100.h"
 #include "GenesisChorus.h"
+#include "GenesisDelay.h"
 #include <string_view>
 #include <algorithm>
 #include <array>
@@ -10,7 +11,7 @@ class LibertyGenesis final : public mpc::Plugin {
 public:
  enum Params { kWaveA, kWaveB, kMix, kDetune, kCutoff, kResonance,
                kVolume, kAttack, kDecay, kSustain, kRelease,
-               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter, kChorusMix, kChorusRate, kChorusDepth, kChorusWidth };
+               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive, kMacroTone, kMacroMotion, kMacroPunch, kSubLevel, kVelocityFilter, kChorusMix, kChorusRate, kChorusDepth, kChorusWidth, kDelayMix, kDelayTime, kDelaySync, kDelayFeedback, kDelayStereo, kDelayTone };
  static mpc::PluginInfo makeInfo() {
   mpc::PluginInfo i;
   i.name = "Liberty Genesis";
@@ -47,6 +48,12 @@ public:
   addParam(mpc::logParam("chorusrate","Chorus Rate",0.05f,5.f,0.35f,"Hz",2));
   addParam(mpc::floatParam("chorusdepth","Chorus Depth",0.f,100.f,45.f,"%",0));
   addParam(mpc::floatParam("choruswidth","Chorus Width",0.f,100.f,100.f,"%",0));
+  addParam(mpc::floatParam("delaymix","Delay Mix",0.f,100.f,0.f,"%",0));
+  addParam(mpc::logParam("delaytime","Delay Time",20.f,1800.f,350.f,"ms",0));
+  addParam(mpc::choiceParam("delaysync","Delay Sync",{"Free","1/16","1/8","1/8 D","1/4","1/4 D","1/2"},0));
+  addParam(mpc::floatParam("delayfeedback","Feedback",0.f,85.f,32.f,"%",0));
+  addParam(mpc::floatParam("delaystereo","Cross Feed",0.f,100.f,75.f,"%",0));
+  addParam(mpc::floatParam("delaytone","Delay Tone",0.f,100.f,55.f,"%",0));
   // MPC native program browser: 100 categorized factory programs.
   for (const auto& preset : liberty::genesisFactory100) {
    const std::string_view name(preset.name);
@@ -57,13 +64,13 @@ public:
     preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
     preset.sustain*100.f, preset.release*1000.f,
     preset.lfoRate, preset.lfoDepth*100.f,
-    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f, chorusMix, 0.35f, 45.f, 100.f
+    preset.filterMode, preset.filterDrive, 50.f, 50.f, 50.f, 0.f, 0.f, chorusMix, 0.35f, 45.f, 100.f, 0.f, 350.f, 0.f, 32.f, 75.f, 55.f
    };
    addProgram(preset.name, std::move(values));
   }
  }
- void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); chorus_.prepare(sampleRate); }
- void reset() override { synth_.allNotesOff(); chorus_.reset(); }
+ void prepare(double sampleRate, int) override { synth_.setSampleRate(sampleRate); synth_.allNotesOff(); chorus_.prepare(sampleRate); delay_.prepare(sampleRate); }
+ void reset() override { synth_.allNotesOff(); chorus_.reset(); delay_.reset(); }
  void process(mpc::ProcessContext& ctx) override {
   if (ctx.numOutputs < 1 || !ctx.outputs || !ctx.outputs[0]) return;
   synth_.setWaveforms(static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveA)),
@@ -84,6 +91,10 @@ public:
   synth_.setADSR(get(kAttack)*.001f*std::pow(2.f,-punch*2.f),get(kDecay)*.001f,get(kSustain)*.01f,get(kRelease)*.001f);
   synth_.setLFO(get(kLfoRate),std::clamp(get(kLfoDepth)*.01f+motion*.5f,0.f,1.f));
   chorus_.set(get(kChorusMix)*.01f,get(kChorusRate),get(kChorusDepth)*.01f,get(kChorusWidth)*.01f);
+  constexpr double beats[]={0.,.25,.5,.75,1.,1.5,2.};
+  const int sync=std::clamp(getInt(kDelaySync),0,6);
+  const double bpm=ctx.transport.tempoValid&&std::isfinite(ctx.transport.bpm)?std::clamp(ctx.transport.bpm,40.,300.):120.;
+  delay_.set(get(kDelayMix)*.01f,sync?beats[sync]*60./bpm:get(kDelayTime)*.001,get(kDelayFeedback)*.01f,get(kDelayStereo)*.01f,get(kDelayTone)*.01f);
   float* left = ctx.outputs[0];
   float* right = ctx.numOutputs > 1 ? ctx.outputs[1] : nullptr;
   int pos = 0;
@@ -100,9 +111,10 @@ public:
  }
 private:
  void render(float* l,float* r,int begin,int end) {
-  for(int i=begin;i<end;++i) { const float s=synth_.processSample(); float a,b; chorus_.process(s,a,b); l[i]=r?a:(a+b)*.5f; if(r)r[i]=b; }
+  for(int i=begin;i<end;++i) { const float s=synth_.processSample(); float a,b; chorus_.process(s,a,b); delay_.process(a,b); l[i]=r?a:(a+b)*.5f; if(r)r[i]=b; }
  }
  liberty::GenesisSynth synth_{};
  liberty::GenesisChorus chorus_{};
+ liberty::GenesisDelay delay_{};
 };
 MPC_PLUGIN_ENTRY(LibertyGenesis)

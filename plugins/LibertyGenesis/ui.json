@@ -149,6 +149,43 @@
           "widget": "fader"
         }
       ]
+    },
+    {
+      "name": "PERFORM",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "TONE"
+        },
+        {
+          "widget": "text",
+          "text": "MOTION"
+        },
+        {
+          "widget": "text",
+          "text": "PUNCH"
+        },
+        {
+          "widget": "text",
+          "text": "LIVE CONTROL"
+        },
+        {
+          "param": "Macro Tone",
+          "widget": "knob"
+        },
+        {
+          "param": "Macro Motion",
+          "widget": "knob"
+        },
+        {
+          "param": "Macro Punch",
+          "widget": "knob"
+        },
+        {
+          "widget": "text",
+          "text": "Q-LINK READY"
+        }
+      ]
     }
   ]
 }

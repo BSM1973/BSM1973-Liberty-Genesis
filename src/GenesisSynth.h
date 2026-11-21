@@ -19,6 +19,7 @@ public:
  void setMatrix(int i,int source,int dest,float amount,bool bipolar){if(i>=0&&i<16)routes[i]={source,dest,std::clamp(amount,-1.f,1.f),bipolar};}
  void setModulators(float rate,float a,float d,float s,float r){lfo2Rate=std::clamp(rate,.05f,20.f);ma=std::max(.001f,a);md=std::max(.001f,d);ms=std::clamp(s,0.f,1.f);mr=std::max(.001f,r);}
  void setExpression(float wheel,float pressure){modWheel=std::clamp(wheel,0.f,1.f);aftertouch=std::clamp(pressure,0.f,1.f);}
+ float effectMod(int dest) const {return dest>=8&&dest<=10?fxMods[dest-8]:0.f;}
  void setOscMix(float v){mix=std::clamp(v,0.f,1.f);}
  void setDetuneCents(float v){detune=std::clamp(v,-100.f,100.f);detuneRatio=std::pow(2.,detune/1200.);}
  void setFilterMode(FilterMode mode){filterMode=mode;}
@@ -39,6 +40,7 @@ public:
  void processStereo(float& left,float& right){
   constexpr double pi=3.14159265358979323846;
   const double lfo=std::sin(2*pi*lfoPhase);lfoPhase=wrap(lfoPhase+lfoRate/sr);
+  fxMods.fill(0.f);int fxVoices=0;
   const double lfo2=std::sin(2*pi*lfo2Phase);lfo2Phase=wrap(lfo2Phase+lfo2Rate/sr);
   const double fc=std::clamp(double(cutoff)*std::pow(2.,lfo*lfoDepth*2.),20.,sr*.45);
   const double g=std::tan(pi*fc/sr),k=2.-1.8*res,a1=1./(1.+g*(g+k)),a2=g*a1,a3=g*a2;
@@ -52,10 +54,11 @@ public:
    if(v.releasing)v.modEnv=v.modRelease*std::max(0.,1.-v.releaseTime/mr);
    else if(!v.modDecay){v.modEnv=std::min(1.,v.modEnv+1./(ma*sr));if(v.modEnv>=1.)v.modDecay=true;}
    else v.modEnv=std::max(double(ms),v.modEnv-(1.-ms)/(md*sr));
-   double m[8]={};
+   double m[11]={};
    const double src[]={0.,(lfo+1.)*.5,(lfo2+1.)*.5,v.env,v.modEnv,v.velocity,modWheel,aftertouch,v.note/127.,v.random};
-   for(const auto& route:routes)if(route.source>0&&route.source<10&&route.dest>0&&route.dest<8&&route.amount!=0){double x=src[route.source];m[route.dest]+=route.amount*(route.bipolar?2*x-1:x);}
-   const double pitch=std::pow(2.,std::clamp(m[1],-1.,1.)*2.);
+   for(const auto& route:routes)if(route.source>0&&route.source<10&&route.dest>0&&route.dest<11&&route.amount!=0){double x=src[route.source];m[route.dest]+=route.amount*(route.bipolar?2*x-1:x);}
+   for(int j=0;j<3;++j)fxMods[j]+=float(m[j+8]);++fxVoices;
+   const double pitch=m[1]==0.?1.:std::pow(2.,std::clamp(m[1],-1.,1.)*2.);
    const double sa=std::min(.45,v.freq*ratioA*pitch/sr),sb=std::min(.45,v.freq*ratioB*detuneRatio*pitch/sr);
    const double pw=std::clamp(double(pulse)+lfo*pwmDepth*.35+m[4]*.4,.05,.95);
    const bool wrapped=v.pa+sa>=1.;v.pa=wrap(v.pa+sa);
@@ -85,6 +88,7 @@ public:
    const double s3=sideIn-v.sc2,s1=va1*v.sc1+va2*s3,s2=v.sc2+va2*v.sc1+va3*s3;v.sc1=2*s1-v.sc1;v.sc2=2*s2-v.sc2;
    side+=filterMode==FilterMode::LowPass?s2:(filterMode==FilterMode::BandPass?s1:sideIn-vk*s1-s2);
   }
+  if(fxVoices)for(auto& x:fxMods)x=std::clamp(x/fxVoices,-1.f,1.f);
   left=float(std::tanh((sum+side)*gain*.22));right=float(std::tanh((sum-side)*gain*.22));
  }
  void process(float* l,float* r,int n){if(!l||!r||n<=0)return;for(int i=0;i<n;++i)processStereo(l[i],r[i]);}
@@ -110,7 +114,7 @@ private:
  bool hardSync=false;double ratioA=1.,ratioB=1.,detuneRatio=std::pow(2.,7./1200.);std::uint32_t rng=0x12345678u;
  int unison=1,uniPhase=0;bool uniEco=true;float uniWidth=1.f,uniBlend=.5f;std::array<double,6> uniRatio{1.,1.,1.,1.,1.,1.};
  struct Route {int source=0,dest=0;float amount=0;bool bipolar=false;};
- std::array<Route,16> routes{};
+ std::array<Route,16> routes{};std::array<float,3> fxMods{};
  double lfo2Phase=0.;float lfo2Rate=.3f,ma=.1f,md=.5f,ms=.5f,mr=.5f,modWheel=0,aftertouch=0;
  unsigned steal=0;
 };

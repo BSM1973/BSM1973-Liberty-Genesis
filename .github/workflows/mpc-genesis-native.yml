@@ -9,6 +9,7 @@ on:
       - 'src/GenesisFactory100.h'
       - 'src/GenesisChorus.h'
       - 'src/GenesisDelay.h'
+      - 'src/GenesisReverb.h'
       - '.github/workflows/mpc-genesis-native.yml'
 jobs:
   build-mpc:
@@ -41,6 +42,7 @@ jobs:
           cp genesis/src/GenesisFactory100.h mpc-sdk/plugins/LibertyGenesis/src/
           cp genesis/src/GenesisChorus.h mpc-sdk/plugins/LibertyGenesis/src/
           cp genesis/src/GenesisDelay.h mpc-sdk/plugins/LibertyGenesis/src/
+          cp genesis/src/GenesisReverb.h mpc-sdk/plugins/LibertyGenesis/src/
       - name: Build and validate MPC native plugin
         working-directory: mpc-sdk
         run: python tools/build.py plugins/LibertyGenesis

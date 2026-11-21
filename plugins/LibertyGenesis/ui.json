@@ -315,6 +315,88 @@
           "widget": "knob"
         }
       ]
+    },
+    {
+      "name": "OSC MOD",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "PULSE WIDTH"
+        },
+        {
+          "widget": "text",
+          "text": "PWM"
+        },
+        {
+          "widget": "text",
+          "text": "FM"
+        },
+        {
+          "widget": "text",
+          "text": "RING"
+        },
+        {
+          "param": "Pulse Width",
+          "widget": "knob"
+        },
+        {
+          "param": "PWM Depth",
+          "widget": "knob"
+        },
+        {
+          "param": "FM Depth",
+          "widget": "knob"
+        },
+        {
+          "param": "Ring Mix",
+          "widget": "knob"
+        },
+        {
+          "param": "Noise Level",
+          "widget": "knob"
+        },
+        {
+          "param": "Osc Sync",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "TUNING",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "OCTAVE A"
+        },
+        {
+          "widget": "text",
+          "text": "SEMITONE A"
+        },
+        {
+          "widget": "text",
+          "text": "OCTAVE B"
+        },
+        {
+          "widget": "text",
+          "text": "SEMITONE B"
+        },
+        {
+          "param": "Octave A",
+          "widget": "knob"
+        },
+        {
+          "param": "Semi A",
+          "widget": "knob"
+        },
+        {
+          "param": "Octave B",
+          "widget": "knob"
+        },
+        {
+          "param": "Semi B",
+          "widget": "knob"
+        }
+      ]
     }
   ]
 }

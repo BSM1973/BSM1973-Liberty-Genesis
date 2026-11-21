@@ -188,6 +188,43 @@
           "text": "Q-LINK READY"
         }
       ]
+    },
+    {
+      "name": "CHORUS",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "MIX"
+        },
+        {
+          "widget": "text",
+          "text": "RATE"
+        },
+        {
+          "widget": "text",
+          "text": "DEPTH"
+        },
+        {
+          "widget": "text",
+          "text": "WIDTH"
+        },
+        {
+          "param": "Chorus Mix",
+          "widget": "knob"
+        },
+        {
+          "param": "Chorus Rate",
+          "widget": "knob"
+        },
+        {
+          "param": "Chorus Depth",
+          "widget": "knob"
+        },
+        {
+          "param": "Chorus Width",
+          "widget": "knob"
+        }
+      ]
     }
   ]
 }

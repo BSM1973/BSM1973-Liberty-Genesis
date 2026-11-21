@@ -91,67 +91,67 @@ public:
   addParam(mpc::floatParam("mods","Mod Sustain",0.f,100.f,50.f,"%",0));
   addParam(mpc::logParam("modr","Mod Release",1.f,20000.f,500.f,"ms",0));
   addParam(mpc::choiceParam("mx1s","M1 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx1d","M1 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx1d","M1 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx1a","M1 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx1p","M1 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx2s","M2 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx2d","M2 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx2d","M2 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx2a","M2 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx2p","M2 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx3s","M3 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx3d","M3 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx3d","M3 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx3a","M3 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx3p","M3 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx4s","M4 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx4d","M4 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx4d","M4 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx4a","M4 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx4p","M4 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx5s","M5 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx5d","M5 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx5d","M5 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx5a","M5 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx5p","M5 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx6s","M6 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx6d","M6 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx6d","M6 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx6a","M6 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx6p","M6 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx7s","M7 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx7d","M7 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx7d","M7 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx7a","M7 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx7p","M7 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx8s","M8 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx8d","M8 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx8d","M8 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx8a","M8 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx8p","M8 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx9s","M9 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx9d","M9 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx9d","M9 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx9a","M9 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx9p","M9 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx10s","M10 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx10d","M10 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx10d","M10 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx10a","M10 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx10p","M10 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx11s","M11 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx11d","M11 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx11d","M11 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx11a","M11 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx11p","M11 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx12s","M12 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx12d","M12 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx12d","M12 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx12a","M12 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx12p","M12 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx13s","M13 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx13d","M13 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx13d","M13 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx13a","M13 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx13p","M13 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx14s","M14 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx14d","M14 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx14d","M14 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx14a","M14 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx14p","M14 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx15s","M15 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx15d","M15 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx15d","M15 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx15a","M15 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx15p","M15 Polarity",{"Uni","Bi"},0));
   addParam(mpc::choiceParam("mx16s","M16 Source",{"Off","LFO 1","LFO 2","Amp Env","Mod Env","Velocity","Mod Wheel","Aftertouch","Key Track","Random"},0));
-  addParam(mpc::choiceParam("mx16d","M16 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison"},0));
+  addParam(mpc::choiceParam("mx16d","M16 Dest",{"Off","Pitch","Cutoff","Resonance","PWM","FM","Ring","Unison","Chorus Mix","Delay Mix","Reverb Mix"},0));
   addParam(mpc::floatParam("mx16a","M16 Amount",-100.f,100.f,0.f,"%",0));
   addParam(mpc::choiceParam("mx16p","M16 Polarity",{"Uni","Bi"},0));
   // MPC native program browser: 100 categorized factory programs.
@@ -197,8 +197,8 @@ public:
    if(pad||poly||lead||tex)values[kVolume]*=.8f;
    values.insert(values.end(),{arp?1.f:0.f,float(v%5),float(1+v%7),float(v%3),float(40+v*5),float(v%4*10),100.f,0.f});
    values.insert(values.end(),{.3f+v*.12f,pad?1200.f:30.f,500.f,35.f,600.f});
-   for(int i=0;i<16;++i){if(i==0)values.insert(values.end(),{5.f,2.f,12.f,0.f});else if(i==1&&(pad||tex))values.insert(values.end(),{2.f,4.f,20.f,1.f});else if(i==2&&(keys||pluck||bass))values.insert(values.end(),{4.f,2.f,25.f,0.f});else if(i==3&&lead)values.insert(values.end(),{6.f,1.f,3.f,0.f});else values.insert(values.end(),{0.f,0.f,0.f,0.f});}
-   addProgram(preset.name, std::move(values));
+   for(int i=0;i<16;++i){if(i==0)values.insert(values.end(),{5.f,2.f,12.f,0.f});else if(i==1&&(pad||tex))values.insert(values.end(),{2.f,4.f,20.f,1.f});else if(i==2&&(keys||pluck||bass))values.insert(values.end(),{4.f,2.f,25.f,0.f});else if(i==3&&lead)values.insert(values.end(),{6.f,1.f,3.f,0.f});else if(i==4&&(pad||tex))values.insert(values.end(),{2.f,10.f,12.f,1.f});else if(i==5&&lead)values.insert(values.end(),{7.f,2.f,20.f,0.f});else if(i==6&&arp)values.insert(values.end(),{1.f,9.f,10.f,1.f});else values.insert(values.end(),{0.f,0.f,0.f,0.f});}
+   if(values.size()==static_cast<size_t>(kMatrix+64)&&std::all_of(values.begin(),values.end(),[](float x){return std::isfinite(x);}))addProgram(preset.name, std::move(values));
   }
  }
  void prepare(double sampleRate, int) override { arpSR=sampleRate; synth_.setSampleRate(sampleRate); synth_.allNotesOff(); chorus_.prepare(sampleRate); delay_.prepare(sampleRate); reverb_.prepare(sampleRate); }
@@ -227,12 +227,12 @@ public:
   synth_.setGain(get(kVolume)*.01f);
   synth_.setADSR(get(kAttack)*.001f*std::pow(2.f,-punch*2.f),get(kDecay)*.001f,get(kSustain)*.01f,get(kRelease)*.001f);
   synth_.setLFO(get(kLfoRate),std::clamp(get(kLfoDepth)*.01f+motion*.5f,0.f,1.f));
-  chorus_.set(get(kChorusMix)*.01f,get(kChorusRate),get(kChorusDepth)*.01f,get(kChorusWidth)*.01f);
+  chorus_.set(std::clamp(get(kChorusMix)*.01f+synth_.effectMod(8),0.f,1.f),get(kChorusRate),get(kChorusDepth)*.01f,get(kChorusWidth)*.01f);
   constexpr double beats[]={0.,.25,.5,.75,1.,1.5,2.};
   const int sync=std::clamp(getInt(kDelaySync),0,6);
   const double bpm=ctx.transport.tempoValid&&std::isfinite(ctx.transport.bpm)?std::clamp(ctx.transport.bpm,40.,300.):120.;
-  delay_.set(get(kDelayMix)*.01f,sync?beats[sync]*60./bpm:get(kDelayTime)*.001,get(kDelayFeedback)*.01f,get(kDelayStereo)*.01f,get(kDelayTone)*.01f);
-  reverb_.set(getInt(kReverbMode),get(kReverbMix)*.01f,get(kReverbPre),get(kReverbDecay),get(kReverbDamp)*.01f,get(kReverbWidth)*.01f);
+  delay_.set(std::clamp(get(kDelayMix)*.01f+synth_.effectMod(9),0.f,1.f),sync?beats[sync]*60./bpm:get(kDelayTime)*.001,get(kDelayFeedback)*.01f,get(kDelayStereo)*.01f,get(kDelayTone)*.01f);
+  reverb_.set(getInt(kReverbMode),std::clamp(get(kReverbMix)*.01f+synth_.effectMod(10),0.f,1.f),get(kReverbPre),get(kReverbDecay),get(kReverbDamp)*.01f,get(kReverbWidth)*.01f);
   const bool nextArp=getInt(kArpOn)!=0;
   if(nextArp!=arpEnabled){synth_.allNotesOff();clearArp();arpEnabled=nextArp;}
   arpMode=getInt(kArpMode);arpOct=1+getInt(kArpOct);
@@ -253,6 +253,8 @@ public:
    if(ev.isNoteOn()){if(arpEnabled)arpNote(ev.note(),true);else synth_.noteOn(ev.note(),ev.velocity()/127.f);}
    else if(ev.isNoteOff()){if(arpEnabled)arpNote(ev.note(),false);else synth_.noteOff(ev.note());}
    else if(ev.isController()&&ev.controller()==1){wheel=ev.controllerValue()/127.f;synth_.setExpression(wheel,pressure);}
+   else if(ev.isAftertouch()&&ev.size>=2){pressure=ev.data[1]/127.f;synth_.setExpression(wheel,pressure);}
+   else if(ev.status()==0xA0&&ev.size>=3){pressure=ev.data[2]/127.f;synth_.setExpression(wheel,pressure);}
    else if(ev.isAllNotesOff()){clearArp();synth_.allNotesOff();}
   }
   render(left,right,pos,ctx.numFrames);

@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'plugins/LibertyGenesis/**'
+      - 'tests/**'
+      - 'CMakeLists.txt'
       - 'src/GenesisSynth.h'
       - 'src/GenesisPresets.h'
       - 'src/GenesisFactory100.h'
@@ -20,6 +22,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: genesis
+      - name: Run DSP quality gate before packaging
+        working-directory: genesis
+        run: |
+          cmake -S . -B build-quality -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+          cmake --build build-quality --parallel 2
+          ctest --test-dir build-quality --output-on-failure
       - name: Checkout MPC SDK
         uses: actions/checkout@v4
         with:

@@ -7,11 +7,14 @@ class GenesisSynth {
 public:
  static constexpr int maxVoices=16;
  enum class Waveform { Sine, Saw, Square, Triangle };
+ enum class FilterMode { LowPass, BandPass, HighPass };
  void setSampleRate(double r){sr=std::max(8000.0,r);}
  void setGain(float v){gain=std::clamp(v,0.f,1.f);}
  void setWaveforms(Waveform a,Waveform b){wa=a;wb=b;}
  void setOscMix(float v){mix=std::clamp(v,0.f,1.f);}
  void setDetuneCents(float v){detune=std::clamp(v,-100.f,100.f);}
+ void setFilterMode(FilterMode mode){filterMode=mode;}
+ void setFilterDrive(float amount){filterDrive=std::clamp(amount,0.f,1.f);}
  void setFilter(float hz,float resonance){cutoff=std::clamp(hz,20.f,18000.f);res=std::clamp(resonance,0.f,.95f);}
  void setADSR(float a,float d,float s,float r){attack=std::clamp(a,.001f,10.f);decay=std::clamp(d,.001f,10.f);sustain=std::clamp(s,0.f,1.f);release=std::clamp(r,.001f,20.f);}
  void setLFO(float rate,float depth){lfoRate=std::clamp(rate,0.f,20.f);lfoDepth=std::clamp(depth,0.f,1.f);}
@@ -29,6 +32,7 @@ public:
   const double lfo=std::sin(2*pi*lfoPhase);lfoPhase=wrap(lfoPhase+lfoRate/sr);
   const double fc=std::clamp(double(cutoff)*std::pow(2.,lfo*lfoDepth*2.),20.,sr*.45);
   const double g=std::tan(pi*fc/sr),k=2.-1.8*res,a1=1./(1.+g*(g+k)),a2=g*a1,a3=g*a2;
+  const double driveGain=1.+filterDrive*7.;
   double sum=0.;
   for(auto& v:voices){
    if(!v.active)continue;
@@ -38,8 +42,11 @@ public:
    const double sa=v.freq/sr,sb=v.freq*std::pow(2.,detune/1200.)/sr;
    v.pa=wrap(v.pa+sa);v.pb=wrap(v.pb+sb);
    const double input=((1.-mix)*wave(v.pa,sa,wa)+mix*wave(v.pb,sb,wb))*v.env*v.velocity;
-   const double v3=input-v.ic2,v1=a1*v.ic1+a2*v3,v2=v.ic2+a2*v.ic1+a3*v3;
-   v.ic1=2*v1-v.ic1;v.ic2=2*v2-v.ic2;sum+=v2;
+   const double driven=std::tanh(input*driveGain)/std::tanh(driveGain);
+   const double v3=driven-v.ic2,v1=a1*v.ic1+a2*v3,v2=v.ic2+a2*v.ic1+a3*v3;
+   v.ic1=2*v1-v.ic1;v.ic2=2*v2-v.ic2;
+   const double high=driven-k*v1-v2;
+   sum+=filterMode==FilterMode::LowPass?v2:(filterMode==FilterMode::BandPass?v1:high);
   }
   return float(std::tanh(sum*gain*.22));
  }
@@ -60,6 +67,8 @@ private:
  double sr=48000.,lfoPhase=0.;
  float gain=.8f,mix=.5f,detune=7.f,cutoff=8000.f,res=.1f,attack=.008f,decay=.1f,sustain=.8f,release=.18f,lfoRate=.5f,lfoDepth=0.f;
  Waveform wa=Waveform::Saw,wb=Waveform::Square;
+ FilterMode filterMode=FilterMode::LowPass;
+ float filterDrive=0.f;
  unsigned steal=0;
 };
 }

@@ -225,6 +225,51 @@
           "widget": "knob"
         }
       ]
+    },
+    {
+      "name": "DELAY",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "MIX"
+        },
+        {
+          "widget": "text",
+          "text": "TIME"
+        },
+        {
+          "widget": "text",
+          "text": "SYNC"
+        },
+        {
+          "widget": "text",
+          "text": "FEEDBACK"
+        },
+        {
+          "param": "Delay Mix",
+          "widget": "knob"
+        },
+        {
+          "param": "Delay Time",
+          "widget": "knob"
+        },
+        {
+          "param": "Delay Sync",
+          "widget": "switch"
+        },
+        {
+          "param": "Feedback",
+          "widget": "knob"
+        },
+        {
+          "param": "Cross Feed",
+          "widget": "knob"
+        },
+        {
+          "param": "Delay Tone",
+          "widget": "knob"
+        }
+      ]
     }
   ]
 }

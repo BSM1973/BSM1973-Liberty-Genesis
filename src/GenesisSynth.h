@@ -11,6 +11,8 @@ public:
  void setSampleRate(double r){sr=std::max(8000.0,r);}
  void setGain(float v){gain=std::clamp(v,0.f,1.f);}
  void setWaveforms(Waveform a,Waveform b){wa=a;wb=b;}
+ void setSubLevel(float v){subLevel=std::clamp(v,0.f,1.f);}
+ void setVelocityFilter(float v){velocityFilter=std::clamp(v,0.f,1.f);}
  void setOscMix(float v){mix=std::clamp(v,0.f,1.f);}
  void setDetuneCents(float v){detune=std::clamp(v,-100.f,100.f);}
  void setFilterMode(FilterMode mode){filterMode=mode;}
@@ -41,9 +43,16 @@ public:
    else {v.env=std::max(double(sustain),v.env-(1.-sustain)/(decay*sr));}
    const double sa=v.freq/sr,sb=v.freq*std::pow(2.,detune/1200.)/sr;
    v.pa=wrap(v.pa+sa);v.pb=wrap(v.pb+sb);
-   const double input=((1.-mix)*wave(v.pa,sa,wa)+mix*wave(v.pb,sb,wb))*v.env*v.velocity;
+   v.ps=wrap(v.ps+sa*.5);
+   const double sub=2.*v.ps-1.-blep(v.ps,sa*.5);
+   const double input=((1.-mix)*wave(v.pa,sa,wa)+mix*wave(v.pb,sb,wb)+subLevel*.5*sub)*v.env*v.velocity;
+   const double voiceVelocityCut=1.-velocityFilter*(1.-v.velocity)*.85;
+   const double vg=velocityFilter>0.f?std::tan(pi*std::clamp(fc*voiceVelocityCut,20.,sr*.45)/sr):g;
+   const double va1=velocityFilter>0.f?1./(1.+vg*(vg+k)):a1;
+   const double va2=velocityFilter>0.f?vg*va1:a2;
+   const double va3=velocityFilter>0.f?vg*va2:a3;
    const double driven=filterDrive>0.f ? std::tanh(input*driveGain)/std::tanh(driveGain) : input;
-   const double v3=driven-v.ic2,v1=a1*v.ic1+a2*v3,v2=v.ic2+a2*v.ic1+a3*v3;
+   const double v3=driven-v.ic2,v1=va1*v.ic1+va2*v3,v2=v.ic2+va2*v.ic1+va3*v3;
    v.ic1=2*v1-v.ic1;v.ic2=2*v2-v.ic2;
    const double high=driven-k*v1-v2;
    sum+=filterMode==FilterMode::LowPass?v2:(filterMode==FilterMode::BandPass?v1:high);
@@ -52,7 +61,7 @@ public:
  }
  void process(float* l,float* r,int n){if(!l||!r||n<=0)return;for(int i=0;i<n;++i)l[i]=r[i]=processSample();}
 private:
- struct Voice {bool active=false,releasing=false,decaying=false;int note=-1;double freq=440.,velocity=0.,pa=0.,pb=0.,env=0.,releaseLevel=0.,releaseTime=0.,ic1=0.,ic2=0.;};
+ struct Voice {bool active=false,releasing=false,decaying=false;int note=-1;double freq=440.,velocity=0.,pa=0.,pb=0.,ps=0.,env=0.,releaseLevel=0.,releaseTime=0.,ic1=0.,ic2=0.;};
  static double wrap(double p){return p-std::floor(p);}
  static double blep(double t,double dt){dt=std::clamp(dt,1.e-8,.5);if(t<dt){t/=dt;return t+t-t*t-1.;}if(t>1.-dt){t=(t-1.)/dt;return t*t+t+t+1.;}return 0.;}
  static double wave(double p,double step,Waveform w){
@@ -68,7 +77,7 @@ private:
  float gain=.8f,mix=.5f,detune=7.f,cutoff=8000.f,res=.1f,attack=.008f,decay=.1f,sustain=.8f,release=.18f,lfoRate=.5f,lfoDepth=0.f;
  Waveform wa=Waveform::Saw,wb=Waveform::Square;
  FilterMode filterMode=FilterMode::LowPass;
- float filterDrive=0.f;
+ float filterDrive=0.f,subLevel=0.f,velocityFilter=0.f;
  unsigned steal=0;
 };
 }

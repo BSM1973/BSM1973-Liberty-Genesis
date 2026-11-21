@@ -202,7 +202,7 @@ public:
   }
  }
  void prepare(double sampleRate, int) override { arpSR=sampleRate; synth_.setSampleRate(sampleRate); synth_.allNotesOff(); chorus_.prepare(sampleRate); delay_.prepare(sampleRate); reverb_.prepare(sampleRate); }
- void reset() override { clearArp(); synth_.allNotesOff(); chorus_.reset(); delay_.reset(); reverb_.reset(); }
+ void reset() override { wheel=pressure=0.f; synth_.setExpression(0.f,0.f);clearArp(); synth_.allNotesOff(); chorus_.reset(); delay_.reset(); reverb_.reset(); }
  void process(mpc::ProcessContext& ctx) override {
   if (ctx.numOutputs < 1 || !ctx.outputs || !ctx.outputs[0]) return;
   synth_.setWaveforms(static_cast<liberty::GenesisSynth::Waveform>(getInt(kWaveA)),
@@ -237,7 +237,8 @@ public:
   if(nextArp!=arpEnabled){synth_.allNotesOff();clearArp();arpEnabled=nextArp;}
   arpMode=getInt(kArpMode);arpOct=1+getInt(kArpOct);
   constexpr double divisions[]={1.,.5,.25,.125,1./3.,1./6.,.75,.375};
-  arpPeriod=arpSR*60./bpm*divisions[std::clamp(getInt(kArpRate),0,7)];
+  const double nextPeriod=arpSR*60./bpm*divisions[std::clamp(getInt(kArpRate),0,7)];
+  if(nextPeriod!=arpPeriod){const double ratio=nextPeriod/arpPeriod;untilStep*=ratio;untilOff*=ratio;arpPeriod=nextPeriod;}
   arpGate=get(kArpGate)*.01;arpSwing=get(kArpSwing)*.01;arpVelocity=get(kArpVel)/127.f;
   const bool nextHold=getInt(kArpHold)!=0;
   if(arpHold&&!nextHold){for(int n=0;n<128;++n)if(!physical[n])held[n]=false;rebuildArp();}
@@ -286,7 +287,7 @@ private:
    arpSound=std::clamp(note+12*(idx/nHeld),0,127);
    synth_.noteOn(arpSound,arpVelocity);
    const double duration=std::max(1.,arpPeriod*(1.+(arpStep%2?-1.:1.)*arpSwing*.5));
-   untilStep+=duration;untilOff=duration*arpGate;
+   untilStep+=duration;untilOff=std::max(1.,untilStep*arpGate);
    arpStep=(arpStep+1)%1000000;
   }
   --untilStep;--untilOff;

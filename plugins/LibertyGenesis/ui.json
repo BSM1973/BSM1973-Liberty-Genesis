@@ -47,7 +47,8 @@
           "widget": "fader"
         },
         {
-          "widget": "empty"
+          "param": "Sub Level",
+          "widget": "knob"
         },
         {
           "widget": "empty"
@@ -98,7 +99,8 @@
           "widget": "knob"
         },
         {
-          "widget": "empty"
+          "param": "Velocity Filter",
+          "widget": "knob"
         },
         {
           "param": "Resonance",

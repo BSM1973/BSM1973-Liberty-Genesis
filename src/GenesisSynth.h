@@ -42,7 +42,7 @@ public:
    const double sa=v.freq/sr,sb=v.freq*std::pow(2.,detune/1200.)/sr;
    v.pa=wrap(v.pa+sa);v.pb=wrap(v.pb+sb);
    const double input=((1.-mix)*wave(v.pa,sa,wa)+mix*wave(v.pb,sb,wb))*v.env*v.velocity;
-   const double driven=std::tanh(input*driveGain)/std::tanh(driveGain);
+   const double driven=filterDrive>0.f ? std::tanh(input*driveGain)/std::tanh(driveGain) : input;
    const double v3=driven-v.ic2,v1=a1*v.ic1+a2*v3,v2=v.ic2+a2*v.ic1+a3*v3;
    v.ic1=2*v1-v.ic1;v.ic2=2*v2-v.ic2;
    const double high=driven-k*v1-v2;

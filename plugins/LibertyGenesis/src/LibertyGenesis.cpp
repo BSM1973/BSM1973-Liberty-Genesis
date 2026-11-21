@@ -8,7 +8,7 @@ class LibertyGenesis final : public mpc::Plugin {
 public:
  enum Params { kWaveA, kWaveB, kMix, kDetune, kCutoff, kResonance,
                kVolume, kAttack, kDecay, kSustain, kRelease,
-               kLfoRate, kLfoDepth };
+               kLfoRate, kLfoDepth, kFilterMode, kFilterDrive };
  static mpc::PluginInfo makeInfo() {
   mpc::PluginInfo i;
   i.name = "Liberty Genesis";
@@ -34,6 +34,8 @@ public:
   addParam(mpc::logParam("release","Release",1.f,20000.f,180.f,"ms",0));
   addParam(mpc::logParam("lforate","LFO Rate",0.05f,20.f,0.5f,"Hz",2));
   addParam(mpc::floatParam("lfodepth","LFO Depth",0.f,100.f,0.f,"%",0));
+  addParam(mpc::choiceParam("filtermode","Filter Mode",{"Low Pass","Band Pass","High Pass"},0));
+  addParam(mpc::floatParam("filterdrive","Filter Drive",0.f,100.f,0.f,"%",0));
   // Register the existing 12 factory presets as real MPC host programs.
   for (const auto& preset : liberty::factoryPresets) {
    std::vector<float> values = {
@@ -41,7 +43,7 @@ public:
     preset.mix*100.f, preset.detune, preset.cutoff, preset.resonance*100.f,
     preset.gain*100.f, preset.attack*1000.f, preset.decay*1000.f,
     preset.sustain*100.f, preset.release*1000.f,
-    preset.lfoRate, preset.lfoDepth*100.f
+    preset.lfoRate, preset.lfoDepth*100.f, 0.f, 0.f
    };
    addProgram(preset.name.data(), std::move(values));
   }
@@ -55,6 +57,8 @@ public:
   synth_.setOscMix(get(kMix)*.01f);
   synth_.setDetuneCents(get(kDetune));
   synth_.setFilter(get(kCutoff),get(kResonance)*.01f);
+  synth_.setFilterMode(static_cast<liberty::GenesisSynth::FilterMode>(getInt(kFilterMode)));
+  synth_.setFilterDrive(get(kFilterDrive)*.01f);
   synth_.setGain(get(kVolume)*.01f);
   synth_.setADSR(get(kAttack)*.001f,get(kDecay)*.001f,get(kSustain)*.01f,get(kRelease)*.001f);
   synth_.setLFO(get(kLfoRate),get(kLfoDepth)*.01f);

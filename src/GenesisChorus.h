@@ -26,15 +26,17 @@ public:
   const double angle=6.283185307179586*std::clamp(rate,.05f,5.f)/sr;
   ds=std::sin(angle);dc=std::cos(angle);
  }
- void process(float input,float& l,float& r){
+ void process(float input,float& l,float& r){processStereo(input,input,l,r);}
+ void processStereo(float inL,float inR,float& l,float& r){
+  const float input=(inL+inR)*.5f;
   buffer[write]=input;
   wet+=(target-wet)*smooth;
-  if(target==0.f && wet<1.e-6f){wet=0.f;l=r=input;}
+  if(target==0.f && wet<1.e-6f){wet=0.f;l=inL;r=inR;}
   else{
    const double base=.016*sr, excursion=.007*sr*depth;
    const float a=tap(base+excursion*sine);
    const float b=tap(base+excursion*(sine*(1.-width)+cosine*width));
-   l=input*(1.f-wet)+a*wet;r=input*(1.f-wet)+b*wet;
+   l=inL*(1.f-wet)+a*wet;r=inR*(1.f-wet)+b*wet;
    const double next=sine*dc+cosine*ds;
    cosine=cosine*dc-sine*ds;sine=next;
    // Correct floating point drift without trigonometry.

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <cstdint>
 namespace liberty {
 class GenesisSynth {
 public:
@@ -13,8 +14,9 @@ public:
  void setWaveforms(Waveform a,Waveform b){wa=a;wb=b;}
  void setSubLevel(float v){subLevel=std::clamp(v,0.f,1.f);}
  void setVelocityFilter(float v){velocityFilter=std::clamp(v,0.f,1.f);}
+ void setAdvanced(float pw,float pwm,float fm,float ring,float noise,bool sync,int octA,int semiA,int octB,int semiB){pulse=std::clamp(pw,.1f,.9f);pwmDepth=std::clamp(pwm,0.f,1.f);fmDepth=std::clamp(fm,0.f,1.f);ringMix=std::clamp(ring,0.f,1.f);noiseMix=std::clamp(noise,0.f,1.f);hardSync=sync;ratioA=std::pow(2.,octA+semiA/12.);ratioB=std::pow(2.,octB+semiB/12.);}
  void setOscMix(float v){mix=std::clamp(v,0.f,1.f);}
- void setDetuneCents(float v){detune=std::clamp(v,-100.f,100.f);}
+ void setDetuneCents(float v){detune=std::clamp(v,-100.f,100.f);detuneRatio=std::pow(2.,detune/1200.);}
  void setFilterMode(FilterMode mode){filterMode=mode;}
  void setFilterDrive(float amount){filterDrive=std::clamp(amount,0.f,1.f);}
  void setFilter(float hz,float resonance){cutoff=std::clamp(hz,20.f,18000.f);res=std::clamp(resonance,0.f,.95f);}
@@ -41,11 +43,18 @@ public:
    if(v.releasing){v.releaseTime+=1./sr;v.env=v.releaseLevel*std::max(0.,1.-v.releaseTime/release);if(v.releaseTime>=release){v.active=false;continue;}}
    else if(v.env<1.&&!v.decaying){v.env=std::min(1.,v.env+1./(attack*sr));if(v.env>=1.)v.decaying=true;}
    else {v.env=std::max(double(sustain),v.env-(1.-sustain)/(decay*sr));}
-   const double sa=v.freq/sr,sb=v.freq*std::pow(2.,detune/1200.)/sr;
-   v.pa=wrap(v.pa+sa);v.pb=wrap(v.pb+sb);
+   const double sa=std::min(.45,v.freq*ratioA/sr),sb=std::min(.45,v.freq*ratioB*detuneRatio/sr);
+   const double pw=std::clamp(double(pulse)+lfo*pwmDepth*.35,.05,.95);
+   const bool wrapped=v.pa+sa>=1.;v.pa=wrap(v.pa+sa);
+   const double oscA=wave(v.pa,sa,wa,pw);
+   const double stepB=std::clamp(sb*(1.+fmDepth*oscA*.95),1.e-8,.45);
+   const double nextB=wrap(v.pb+stepB);
+   if(hardSync&&wrapped){const double after=v.pa/sa;const double resetPhase=after*stepB;v.syncResidual+=wave(nextB,stepB,wb,pw)-wave(resetPhase,stepB,wb,pw);v.pb=resetPhase;}else v.pb=nextB;
+   const double oscB=wave(v.pb,stepB,wb,pw)+v.syncResidual;v.syncResidual*=.35;
+   double noise=0.;if(noiseMix>0){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;noise=double(rng)/2147483648.-1.;}
    v.ps=wrap(v.ps+sa*.5);
    const double sub=2.*v.ps-1.-blep(v.ps,sa*.5);
-   const double input=((1.-mix)*wave(v.pa,sa,wa)+mix*wave(v.pb,sb,wb)+subLevel*.5*sub)*v.env*v.velocity;
+   const double input=((1.-ringMix)*((1.-mix)*oscA+mix*oscB)+ringMix*oscA*oscB+noiseMix*.5*noise+subLevel*.5*sub)*v.env*v.velocity;
    const double voiceVelocityCut=1.-velocityFilter*(1.-v.velocity)*.85;
    const double vg=velocityFilter>0.f?std::tan(pi*std::clamp(fc*voiceVelocityCut,20.,sr*.45)/sr):g;
    const double va1=velocityFilter>0.f?1./(1.+vg*(vg+k)):a1;
@@ -61,14 +70,14 @@ public:
  }
  void process(float* l,float* r,int n){if(!l||!r||n<=0)return;for(int i=0;i<n;++i)l[i]=r[i]=processSample();}
 private:
- struct Voice {bool active=false,releasing=false,decaying=false;int note=-1;double freq=440.,velocity=0.,pa=0.,pb=0.,ps=0.,env=0.,releaseLevel=0.,releaseTime=0.,ic1=0.,ic2=0.;};
+ struct Voice {bool active=false,releasing=false,decaying=false;int note=-1;double freq=440.,velocity=0.,pa=0.,pb=0.,ps=0.,env=0.,releaseLevel=0.,releaseTime=0.,ic1=0.,ic2=0.,syncResidual=0.;};
  static double wrap(double p){return p-std::floor(p);}
  static double blep(double t,double dt){dt=std::clamp(dt,1.e-8,.5);if(t<dt){t/=dt;return t+t-t*t-1.;}if(t>1.-dt){t=(t-1.)/dt;return t*t+t+t+1.;}return 0.;}
- static double wave(double p,double step,Waveform w){
+ static double wave(double p,double step,Waveform w,double pw=.5){
   switch(w){
    case Waveform::Sine:return std::sin(6.283185307179586*p);
    case Waveform::Saw:return 2*p-1-blep(p,step);
-   case Waveform::Square:return (p<.5?1.:-1.)+blep(p,step)-blep(wrap(p+.5),step);
+   case Waveform::Square:return (p<pw?1.:-1.)+blep(p,step)-blep(wrap(p-pw),step);
    case Waveform::Triangle:return 1.-4.*std::abs(p-.5);
   }return 0.;
  }
@@ -78,6 +87,8 @@ private:
  Waveform wa=Waveform::Saw,wb=Waveform::Square;
  FilterMode filterMode=FilterMode::LowPass;
  float filterDrive=0.f,subLevel=0.f,velocityFilter=0.f;
+ float pulse=.5f,pwmDepth=0.f,fmDepth=0.f,ringMix=0.f,noiseMix=0.f;
+ bool hardSync=false;double ratioA=1.,ratioB=1.,detuneRatio=std::pow(2.,7./1200.);std::uint32_t rng=0x12345678u;
  unsigned steal=0;
 };
 }

@@ -1,9 +1,35 @@
 {
-  "kit": "mpc-red",
+  "kit": {
+    "theme": "amber",
+    "accent": "ffd9b86a"
+  },
+  "qlinkGroups": "columns",
+  "style": {
+    "background": "ff0c1729",
+    "accent": "ffd9b86a",
+    "text": "fff5f7fb",
+    "muted": "ff9fb2ca"
+  },
   "pages": [
     {
-      "name": "OSCILLATORS",
+      "name": "OSC",
       "controls": [
+        {
+          "widget": "text",
+          "text": "OSCILLATOR A"
+        },
+        {
+          "widget": "text",
+          "text": "OSCILLATOR B"
+        },
+        {
+          "widget": "text",
+          "text": "BLEND"
+        },
+        {
+          "widget": "text",
+          "text": "OUTPUT"
+        },
         {
           "param": "Wave A",
           "widget": "switch"
@@ -17,18 +43,19 @@
           "widget": "knob"
         },
         {
-          "param": "Detune",
-          "widget": "knob"
-        },
-        {
           "param": "Volume",
-          "widget": "knob"
+          "widget": "fader"
         },
         {
           "widget": "empty"
         },
         {
           "widget": "empty"
+        },
+        {
+          "param": "Detune",
+          "widget": "knob",
+          "polarity": "bipolar"
         },
         {
           "widget": "empty"
@@ -38,6 +65,22 @@
     {
       "name": "FILTER",
       "controls": [
+        {
+          "widget": "text",
+          "text": "TONE"
+        },
+        {
+          "widget": "text",
+          "text": "RESONANCE"
+        },
+        {
+          "widget": "text",
+          "text": "MOVEMENT"
+        },
+        {
+          "widget": "text",
+          "text": "DEPTH"
+        },
         {
           "param": "Cutoff",
           "widget": "knob"
@@ -53,24 +96,28 @@
         {
           "param": "LFO Depth",
           "widget": "knob"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
         }
       ]
     },
     {
-      "name": "ENVELOPE",
+      "name": "AMP ENV",
       "controls": [
+        {
+          "widget": "text",
+          "text": "ATTACK"
+        },
+        {
+          "widget": "text",
+          "text": "DECAY"
+        },
+        {
+          "widget": "text",
+          "text": "SUSTAIN"
+        },
+        {
+          "widget": "text",
+          "text": "RELEASE"
+        },
         {
           "param": "Attack",
           "widget": "fader"
@@ -86,26 +133,8 @@
         {
           "param": "Release",
           "widget": "fader"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
         }
       ]
     }
-  ],
-  "style": {
-    "background": "ff101c30",
-    "accent": "ffd6ae63",
-    "text": "ffffffff",
-    "muted": "ff9aaac1"
-  }
+  ]
 }

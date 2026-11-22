@@ -19,6 +19,25 @@ struct GenesisArpTimingTest {
    }
    ++cases;
   }
+  // Exercise the real process callback at a tempo change, with zero frames
+  // so that only transport/parameter handling changes the scheduler.
+  for(double sr:{44100.,48000.,96000.})for(double from:{60.,120.,180.})for(double to:{60.,120.,180.}){
+   LibertyGenesis p;p.prepare(sr,256);
+   p.set(LibertyGenesis::kArpOn,1);p.set(LibertyGenesis::kArpRate,2);
+   float dummy=0;float* outputs[]={&dummy,&dummy};
+   mpc::ProcessContext ctx{};ctx.outputs=outputs;ctx.numOutputs=2;ctx.numFrames=0;
+   ctx.transport.tempoValid=true;ctx.transport.bpm=from;p.process(ctx);
+   p.arpNote(60,true);p.arpTick();
+   for(int i=0;i<100;++i)p.arpTick();
+   const double step=p.untilStep,off=p.untilOff,period=p.arpPeriod;
+   ctx.transport.bpm=to;p.process(ctx);
+   if(std::abs(p.arpPeriod-sr*60./to*.25)>1e-7 ||
+      std::abs(p.untilStep-step*p.arpPeriod/period)>1e-7 ||
+      std::abs(p.untilOff-off*p.arpPeriod/period)>1e-7){
+    std::cerr<<"Tempo transition phase mismatch\n";std::exit(1);
+   }
+  }
+  std::cout<<"27 tempo transition cases passed; ";
   std::cout<<cases<<" cases, max timing error "<<worst<<" samples\n";
  }
 };

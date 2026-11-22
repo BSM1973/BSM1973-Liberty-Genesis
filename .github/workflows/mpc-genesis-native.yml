@@ -52,6 +52,7 @@ jobs:
           mkdir -p mpc-sdk/plugins/LibertyGenesis/src
           cp genesis/plugins/LibertyGenesis/plugin.json mpc-sdk/plugins/LibertyGenesis/
           cp genesis/plugins/LibertyGenesis/ui.json mpc-sdk/plugins/LibertyGenesis/
+          cp -r genesis/plugins/LibertyGenesis/assets mpc-sdk/plugins/LibertyGenesis/
           cp genesis/plugins/LibertyGenesis/src/*.cpp mpc-sdk/plugins/LibertyGenesis/src/
           cp genesis/src/GenesisSynth.h mpc-sdk/plugins/LibertyGenesis/src/
           cp genesis/src/GenesisPresets.h mpc-sdk/plugins/LibertyGenesis/src/

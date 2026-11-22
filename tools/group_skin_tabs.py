@@ -7,7 +7,7 @@ import pathlib
 import sys
 if len(sys.argv)!=2: raise SystemExit("Usage: group_skin_tabs.py <Plugin Skins directory>")
 skins=pathlib.Path(sys.argv[1])
-sys.path.insert(0,str((skins.parents[3]/"tools").resolve()))
+sys.path.insert(0,str((skins.parents[4]/"tools").resolve()))
 from gen_ui import Obj, dump_json
 def read(path):
     return json.loads(path.read_text(encoding="utf-8"),object_pairs_hook=Obj)

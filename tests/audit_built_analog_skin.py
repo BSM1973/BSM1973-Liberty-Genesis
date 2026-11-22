@@ -4,12 +4,22 @@ import json,pathlib,sys
 skins=pathlib.Path(sys.argv[1])
 tui=json.loads((skins/"TUI.json").read_text(encoding="utf-8"))
 spec=json.loads((skins.parents[2]/"ui.json").read_text(encoding="utf-8"))
-tabs={t["tabName"]:t for t in tui["pageData"]["tabs"]}
+all_tabs=tui["pageData"]["tabs"]
+# Background assets retain unique stable identities even when four consecutive
+# sub-tabs deliberately share a larger, easily hit MATRIX function-key title.
+tabs={t["componentDefinition"]["backgroundData"]["unfocussed"]["image"]:t for t in all_tabs}
 defs={d["key"]:d["value"] for d in tui["pageData"]["componentDefinitions"]["localComponentDefinitions"]}
-assert len(tabs)==20 and len({(t["fnKeyIndex"],t["fnKeySubIndex"]) for t in tabs.values()})==20
+assert len(tabs)==20 and len({(t["fnKeyIndex"],t["fnKeySubIndex"]) for t in all_tabs})==20
 mapped=set()
 for p in spec["pages"]:
-    tab=tabs[p["name"]];c=tab["componentDefinition"]["componentsData"]
+    tab=tabs[p["background"]];c=tab["componentDefinition"]["componentsData"]
+    if p["name"].startswith("MATRIX "):
+        n=int(p["name"].split()[1])
+        assert tab["tabName"]==("M1-4" if n<=4 else "M5-8")
+        assert tab["fnKeyIndex"]==(4 if n<=4 else 5)
+        assert tab["fnKeySubIndex"]==(n-1)%4
+    else:
+        assert tab["tabName"]==p["name"]
     assert len(c)==len(p["controls"]),(p["name"],len(c),len(p["controls"]))
     assert len(tab["qlinkBoundsData"])==(len(c)+3)//4
     rects=[]
@@ -37,4 +47,4 @@ for p in spec["pages"]:
 assert len(mapped)==129,len(mapped)
 for asset in ("knob_uni.png","fader_h_uni.png","TUI.json","Q-Links.json"):
     assert (skins/asset).is_file(),asset
-print("GENESIS UI 03 PASSED: all 20 active-only pages, 129 params, >=25pt titles, no overlaps.")
+print("GENESIS UI 03 PASSED: all 20 accessible pages, 129 params, 8 MATRIX subpages using large bank keys.")

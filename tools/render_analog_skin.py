@@ -103,7 +103,17 @@ def backgrounds(page, page_no, out_dir):
         accent=BARS[row%4] if main else (BARS[0] if row==0 else BARS[1])
         shade(d,y0,y0+32,tuple(min(255,k+21) for k in accent),accent,23,1257)
         d.line((23,y0,1257,y0),fill=(205,148,67),width=1)
-        text=sections[row] if main else page["name"]+(" / SOUND ENGINE" if row==0 else " / MODULATION & Q-LINK")
+        if not main and page["name"].startswith("MATRIX "):
+            page_n=int(page["name"].split()[1])
+            bank="M1-4" if page_n<=4 else "M5-8"
+            if row==0:
+                text=f"MATRIX {page_n} / ROUTES {page_n*2-1} AND {page_n*2}"
+                label(d,1034,y0+9,f"{(page_n-1)%4+1} / 4",17,
+                      (255,231,184),True,max_width=79)
+            else:
+                text=f"PRESS THE LARGE {bank} KEY BELOW AGAIN TO CHANGE MATRIX PAGE"
+        else:
+            text=sections[row] if main else page["name"]+(" / SOUND ENGINE" if row==0 else " / MODULATION & Q-LINK")
         label(d,32,y0+9,text,17,(248,231,204),True,max_width=1000)
         label(d,1136,y0+9,"LIBERTY",11,(252,215,151),True,max_width=107)
     for i,(x,y,w,h) in enumerate(layout_for(page)):

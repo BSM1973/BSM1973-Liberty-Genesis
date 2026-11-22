@@ -105,5 +105,14 @@ for p in spec["pages"]:
         rectangles.append(f"{x0} {y0} {x1-x0} {y1-y0}")
     put(tab,"qlinkBoundsData",rectangles)
 assert len(handles)==129,(len(handles),handles)
+# MPC firmware supplies only small sub-tab position indicators. The actual large
+# function keys are the supported touch targets: give each of the two matrix
+# banks a stable, descriptive large caption regardless of current sub-page.
+for n in range(1,9):
+    tab=tabs[f"MATRIX {n}"]
+    label="M1-4" if n<=4 else "M5-8"
+    assert get(tab,"fnKeyIndex")==(4 if n<=4 else 5)
+    assert get(tab,"fnKeySubIndex")==((n-1)%4)
+    put(tab,"tabName",label)
 (skins/"TUI.json").write_text(dump_json(tui)+"\n",encoding="utf-8")
-print("Genesis Analog UI 03: 20 adapted touch panels; 129 mapped controls, no ghost slots.")
+print("Genesis Analog UI 03: 20 touch panels, 129 params, large M1-4 / M5-8 cycling keys.")

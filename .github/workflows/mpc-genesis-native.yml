@@ -53,6 +53,10 @@ jobs:
           cp genesis/src/GenesisChorus.h mpc-sdk/plugins/LibertyGenesis/src/
           cp genesis/src/GenesisDelay.h mpc-sdk/plugins/LibertyGenesis/src/
           cp genesis/src/GenesisReverb.h mpc-sdk/plugins/LibertyGenesis/src/
+      - name: Test native plugin state round-trip
+        run: |
+          c++ -std=c++17 -O2 -I mpc-sdk/framework -I mpc-sdk/plugins/LibertyGenesis/src genesis/tests/native_state.cpp -o /tmp/genesis-native-state
+          /tmp/genesis-native-state
       - name: Build and validate MPC native plugin
         working-directory: mpc-sdk
         run: python tools/build.py plugins/LibertyGenesis

@@ -86,22 +86,6 @@
       "name": "OSC MOD",
       "controls": [
         {
-          "widget": "text",
-          "text": "PULSE WIDTH"
-        },
-        {
-          "widget": "text",
-          "text": "PWM"
-        },
-        {
-          "widget": "text",
-          "text": "FM"
-        },
-        {
-          "widget": "text",
-          "text": "RING"
-        },
-        {
           "param": "Pulse Width",
           "widget": "knob"
         },
@@ -132,22 +116,6 @@
       "name": "TUNING",
       "controls": [
         {
-          "widget": "text",
-          "text": "OCTAVE A"
-        },
-        {
-          "widget": "text",
-          "text": "SEMITONE A"
-        },
-        {
-          "widget": "text",
-          "text": "OCTAVE B"
-        },
-        {
-          "widget": "text",
-          "text": "SEMITONE B"
-        },
-        {
           "param": "Octave A",
           "widget": "knob"
         },
@@ -169,22 +137,6 @@
     {
       "name": "UNISON",
       "controls": [
-        {
-          "widget": "text",
-          "text": "COUNT"
-        },
-        {
-          "widget": "text",
-          "text": "DETUNE"
-        },
-        {
-          "widget": "text",
-          "text": "WIDTH"
-        },
-        {
-          "widget": "text",
-          "text": "BLEND"
-        },
         {
           "param": "Unison Count",
           "widget": "knob"
@@ -216,22 +168,6 @@
       "name": "FILTER",
       "controls": [
         {
-          "widget": "text",
-          "text": "FILTER ENGINE"
-        },
-        {
-          "widget": "text",
-          "text": "CUTOFF / Q"
-        },
-        {
-          "widget": "text",
-          "text": "ANALOG DRIVE"
-        },
-        {
-          "widget": "text",
-          "text": "MODULATION"
-        },
-        {
           "param": "Filter Mode",
           "widget": "switch"
         },
@@ -256,9 +192,6 @@
           "widget": "knob"
         },
         {
-          "widget": "empty"
-        },
-        {
           "param": "LFO Depth",
           "widget": "knob"
         }
@@ -268,22 +201,6 @@
     {
       "name": "AMP ENV",
       "controls": [
-        {
-          "widget": "text",
-          "text": "ATTACK"
-        },
-        {
-          "widget": "text",
-          "text": "DECAY"
-        },
-        {
-          "widget": "text",
-          "text": "SUSTAIN"
-        },
-        {
-          "widget": "text",
-          "text": "RELEASE"
-        },
         {
           "param": "Attack",
           "widget": "fader"
@@ -307,22 +224,6 @@
       "name": "MOD ENV",
       "controls": [
         {
-          "widget": "text",
-          "text": "ATTACK"
-        },
-        {
-          "widget": "text",
-          "text": "DECAY"
-        },
-        {
-          "widget": "text",
-          "text": "SUSTAIN"
-        },
-        {
-          "widget": "text",
-          "text": "RELEASE"
-        },
-        {
           "param": "Mod Attack",
           "widget": "fader"
         },
@@ -339,30 +240,8 @@
           "widget": "fader"
         },
         {
-          "widget": "text",
-          "text": "LFO 2"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
           "param": "LFO 2 Rate",
           "widget": "knob"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
         }
       ],
       "background": "genesis-panel-mod-env.png"
@@ -370,22 +249,6 @@
     {
       "name": "CHORUS",
       "controls": [
-        {
-          "widget": "text",
-          "text": "MIX"
-        },
-        {
-          "widget": "text",
-          "text": "RATE"
-        },
-        {
-          "widget": "text",
-          "text": "DEPTH"
-        },
-        {
-          "widget": "text",
-          "text": "WIDTH"
-        },
         {
           "param": "Chorus Mix",
           "widget": "knob"
@@ -408,22 +271,6 @@
     {
       "name": "DELAY",
       "controls": [
-        {
-          "widget": "text",
-          "text": "MIX"
-        },
-        {
-          "widget": "text",
-          "text": "TIME"
-        },
-        {
-          "widget": "text",
-          "text": "SYNC"
-        },
-        {
-          "widget": "text",
-          "text": "FEEDBACK"
-        },
         {
           "param": "Delay Mix",
           "widget": "knob"
@@ -456,22 +303,6 @@
       "name": "REVERB",
       "controls": [
         {
-          "widget": "text",
-          "text": "MODE"
-        },
-        {
-          "widget": "text",
-          "text": "MIX"
-        },
-        {
-          "widget": "text",
-          "text": "PRE DELAY"
-        },
-        {
-          "widget": "text",
-          "text": "DECAY"
-        },
-        {
           "param": "Reverb Mode",
           "widget": "switch"
         },
@@ -502,22 +333,6 @@
       "name": "PERFORM",
       "controls": [
         {
-          "widget": "text",
-          "text": "TONE"
-        },
-        {
-          "widget": "text",
-          "text": "MOTION"
-        },
-        {
-          "widget": "text",
-          "text": "PUNCH"
-        },
-        {
-          "widget": "text",
-          "text": "LIVE CONTROL"
-        },
-        {
           "param": "Macro Tone",
           "widget": "knob"
         },
@@ -528,10 +343,6 @@
         {
           "param": "Macro Punch",
           "widget": "knob"
-        },
-        {
-          "widget": "text",
-          "text": "Q-LINK READY"
         }
       ],
       "background": "genesis-panel-perform.png"
@@ -539,22 +350,6 @@
     {
       "name": "ARP",
       "controls": [
-        {
-          "widget": "text",
-          "text": "ENABLE"
-        },
-        {
-          "widget": "text",
-          "text": "MODE"
-        },
-        {
-          "widget": "text",
-          "text": "RATE"
-        },
-        {
-          "widget": "text",
-          "text": "OCTAVES"
-        },
         {
           "param": "Arp On",
           "widget": "switch"
@@ -594,22 +389,6 @@
       "name": "MATRIX 1",
       "controls": [
         {
-          "widget": "text",
-          "text": "1 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "1 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "1 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "1 POLARITY"
-        },
-        {
           "param": "M1 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -627,22 +406,6 @@
         {
           "param": "M1 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "2 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "2 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "2 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "2 POLARITY"
         },
         {
           "param": "M2 Source",
@@ -670,22 +433,6 @@
       "name": "MATRIX 2",
       "controls": [
         {
-          "widget": "text",
-          "text": "3 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "3 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "3 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "3 POLARITY"
-        },
-        {
           "param": "M3 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -703,22 +450,6 @@
         {
           "param": "M3 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "4 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "4 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "4 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "4 POLARITY"
         },
         {
           "param": "M4 Source",
@@ -746,22 +477,6 @@
       "name": "MATRIX 3",
       "controls": [
         {
-          "widget": "text",
-          "text": "5 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "5 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "5 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "5 POLARITY"
-        },
-        {
           "param": "M5 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -779,22 +494,6 @@
         {
           "param": "M5 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "6 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "6 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "6 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "6 POLARITY"
         },
         {
           "param": "M6 Source",
@@ -822,22 +521,6 @@
       "name": "MATRIX 4",
       "controls": [
         {
-          "widget": "text",
-          "text": "7 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "7 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "7 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "7 POLARITY"
-        },
-        {
           "param": "M7 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -855,22 +538,6 @@
         {
           "param": "M7 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "8 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "8 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "8 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "8 POLARITY"
         },
         {
           "param": "M8 Source",
@@ -898,22 +565,6 @@
       "name": "MATRIX 5",
       "controls": [
         {
-          "widget": "text",
-          "text": "9 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "9 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "9 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "9 POLARITY"
-        },
-        {
           "param": "M9 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -931,22 +582,6 @@
         {
           "param": "M9 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "10 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "10 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "10 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "10 POLARITY"
         },
         {
           "param": "M10 Source",
@@ -974,22 +609,6 @@
       "name": "MATRIX 6",
       "controls": [
         {
-          "widget": "text",
-          "text": "11 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "11 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "11 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "11 POLARITY"
-        },
-        {
           "param": "M11 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -1007,22 +626,6 @@
         {
           "param": "M11 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "12 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "12 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "12 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "12 POLARITY"
         },
         {
           "param": "M12 Source",
@@ -1050,22 +653,6 @@
       "name": "MATRIX 7",
       "controls": [
         {
-          "widget": "text",
-          "text": "13 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "13 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "13 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "13 POLARITY"
-        },
-        {
           "param": "M13 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -1083,22 +670,6 @@
         {
           "param": "M13 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "14 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "14 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "14 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "14 POLARITY"
         },
         {
           "param": "M14 Source",
@@ -1126,22 +697,6 @@
       "name": "MATRIX 8",
       "controls": [
         {
-          "widget": "text",
-          "text": "15 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "15 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "15 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "15 POLARITY"
-        },
-        {
           "param": "M15 Source",
           "widget": "knob",
           "overlay": "menu"
@@ -1159,22 +714,6 @@
         {
           "param": "M15 Polarity",
           "widget": "switch"
-        },
-        {
-          "widget": "text",
-          "text": "16 SOURCE"
-        },
-        {
-          "widget": "text",
-          "text": "16 DEST"
-        },
-        {
-          "widget": "text",
-          "text": "16 AMOUNT"
-        },
-        {
-          "widget": "text",
-          "text": "16 POLARITY"
         },
         {
           "param": "M16 Source",

@@ -73,7 +73,7 @@ jobs:
         run: python tools/build.py plugins/LibertyGenesis
       - name: Map 20 pages to six MPC function keys
         run: python genesis/tools/group_skin_tabs.py mpc-sdk/plugins/LibertyGenesis/build/'Liberty Music Software - VST - Liberty Genesis'/'Plugin Skins'
-      - name: Build fully custom analog main panel
+      - name: Build responsive analog controls for all 20 pages
         run: python genesis/tools/apply_analog_main.py mpc-sdk/plugins/LibertyGenesis/build/'Liberty Music Software - VST - Liberty Genesis'/'Plugin Skins'
       - name: Verify the installed skin is a real custom analog front panel
         run: python genesis/tests/audit_built_analog_skin.py mpc-sdk/plugins/LibertyGenesis/build/'Liberty Music Software - VST - Liberty Genesis'/'Plugin Skins'
@@ -97,8 +97,8 @@ jobs:
           mkdir -p artifacts
           folder="$(find mpc-sdk/plugins/LibertyGenesis/build -mindepth 1 -maxdepth 1 -type d -name '* - VST - Liberty Genesis' -print -quit)"
           test -n "$folder"
-          cp genesis/docs/INSTALL_GENESIS_ANALOG_02.txt "$(dirname "$folder")/INSTALLATION-GENESIS-ANALOG-02.txt"
-          (cd "$(dirname "$folder")" && zip -qr "$GITHUB_WORKSPACE/artifacts/liberty-genesis-mpc-arm32-arm64.zip" "$(basename "$folder")" INSTALLATION-GENESIS-ANALOG-02.txt)
+          cp genesis/docs/INSTALL_GENESIS_ANALOG_03.txt "$(dirname "$folder")/INSTALLATION-GENESIS-ANALOG-03.txt"
+          (cd "$(dirname "$folder")" && zip -qr "$GITHUB_WORKSPACE/artifacts/liberty-genesis-mpc-arm32-arm64.zip" "$(basename "$folder")" INSTALLATION-GENESIS-ANALOG-03.txt)
           test -s artifacts/liberty-genesis-mpc-arm32-arm64.zip
       - name: Upload MPC artifact
         uses: actions/upload-artifact@v4

@@ -75,135 +75,56 @@ def wood(draw, rng):
         draw.line((x+2 if x==18 else x-2,0,x+2 if x==18 else x-2,HEIGHT),
                   fill=(8,9,10),width=2)
 
-def premium_main_panel(page, number, out_dir):
-    """GENESIS front panel: sixteen real touch controls, two horizontal decks.
-    Module colours, LED rails and engraving are drawn behind live firmware widgets.
-    """
-    rng=random.Random(2037)
-    img=Image.new("RGB",(WIDTH,HEIGHT),(15,16,17))
-    d=ImageDraw.Draw(img)
-    for y in range(HEIGHT):
-        n=round(3*math.sin(y*0.38)+rng.uniform(-1,1))
-        d.line((18,y,1261,y),fill=(27+n,27+n,29+n))
-    cols=("DCO A","DCO B","MIX","SUB","VCF CUT","VCF RES","VCF MODE","VCF DRIVE",
-          "LFO RATE","LFO DEPTH","CHORUS","DELAY","VOLUME","DETUNE","AMP ENV","ARP ON")
-    values=("DCO","DCO","MIXER","MIXER","FILTER","FILTER","FILTER","FILTER",
-            "MOD","MOD","FX","FX","OUTPUT","TUNING","ENV","PERFORM")
-    for row in range(2):
-        band_y=10 if row==0 else 314
-        band=(151,42,45) if row==0 else (42,83,115)
-        shade(d,band_y,band_y+33,tuple(min(255,a+30) for a in band),band,21,1259)
-        d.line((21,band_y,1259,band_y),fill=tuple(min(255,a+70) for a in band),width=1)
-        d.line((21,band_y+34,1259,band_y+34),fill=(5,6,7),width=2)
-        label(d,31,band_y+9,"GENESIS  /  ANALOG UI 02" if row==0 else
-              "SOUND LAB  /  MODULATION  /  EFFECTS  /  PERFORMANCE",
-              16,(249,239,217),True,max_width=900)
-        label(d,1095,band_y+10,"LIBERTY",13,(248,214,156),True,max_width=140)
-        for col in range(8):
-            x=24+156*col
-            y=54 if row==0 else 350
-            d.rounded_rectangle((x,y,x+139,y+242),radius=6,fill=(23,24,25),outline=(94,91,83),width=1)
-            d.line((x+4,y+4,x+135,y+4),fill=(122,116,97),width=1)
-            d.rectangle((x+4,y+31,x+135,y+33),fill=(70,67,61))
-            n=row*8+col
-            # A discreet module number in metallic lettering, not a fake interactive control.
-            label(d,x+10,y+8,values[n],10,(163,163,157),True,max_width=118)
-            # graduation marks for the vertical-fader slots, behind their live control track
-            if n in (2,3,9,10,11,12,14):
-                for j in range(11):
-                    yy=y+42+j*14
-                    d.line((x+25,yy,x+33+(5 if j%5==0 else 0),yy),
-                           fill=(95,95,89),width=1)
-                    d.line((x+105,yy,x+113+(5 if j%5==0 else 0),yy),
-                           fill=(95,95,89),width=1)
-            d.ellipse((x+121,y+224,x+127,y+230),fill=(221,151,43))
-            d.line((x+7,y+235,x+130,y+235),fill=(8,9,10),width=1)
-            screw(d,x+8,y+236)
-    wood(d,rng)
-    label(d,23,HEIGHT-17,"LIBERTY MUSIC SOFTWARE  /  GENESIS  /  ANALOG SERIES  /  UI REV. 02",
-          9,(176,171,158),True,max_width=770)
-    label(d,1100,HEIGHT-17,"16 LIVE CONTROLS",9,(176,171,158),True,max_width=152)
-    out=out_dir/page["background"]
-    img.save(out,format="PNG",optimize=True)
+def layout_for(page):
+    n=len([c for c in page["controls"] if "param" in c])
+    if page["name"]=="GENESIS":
+        assert n==16
+        return [(SLOT_X[i%4],SLOT_Y[i//4],278,107) for i in range(16)]
+    out=[]
+    for row,cnt in enumerate((min(4,n),max(0,n-4))):
+        if not cnt:continue
+        x0={1:503,2:343,3:183,4:23}[cnt]
+        y=174 if n<=4 else (65 if row==0 else 351)
+        out += [(x0+i*320,y,278,228) for i in range(cnt)]
     return out
 
 def backgrounds(page, page_no, out_dir):
-    if page["name"]=="GENESIS":
-        return premium_main_panel(page,page_no,out_dir)
-    rng=random.Random(701 + page_no * 193)
-    img=Image.new("RGB",(WIDTH,HEIGHT),PALETTE["back"])
-    draw=ImageDraw.Draw(img)
-    # Anodised chassis: fine hand-tuned horizontal brushed-metal texture.
+    main=page["name"]=="GENESIS"
+    rng=random.Random(701+page_no*193)
+    im=Image.new("RGB",(WIDTH,HEIGHT),PALETTE["back"])
+    d=ImageDraw.Draw(im)
     for y in range(HEIGHT):
-        v=int(2*math.sin(y*.51)+rng.uniform(-1,1))
-        draw.line((19,y,1261,y),fill=(21+v,22+v,24+v))
-    for row, start in enumerate(ROW_STARTS):
-        end = ROW_STARTS[row+1]-1 if row < 3 else HEIGHT-1
-        shade(draw,start,end,(34,35,37),(18,19,21),19,1261)
-        draw.line((19,end,1261,end),fill=(101,101,97),width=1)
-        draw.line((19,end-2,1261,end-2),fill=(7,8,10),width=1)
-        # Burgundy / steel-blue panel bands, with restrained satin shading.
-        y1,y2=start+9,start+33
-        bar=BARS[row]
-        shade(draw,y1,y2,tuple(min(255,k+24) for k in bar),bar,24,1257)
-        draw.line((24,y1,1257,y1),fill=tuple(min(255,k+63) for k in bar))
-        draw.line((24,y2,1257,y2),fill=(5,8,11),width=2)
-        # Each module is independently framed, with tactile breathing room.
-        for col,x in enumerate(SLOT_X):
-            y=SLOT_Y[row]
-            draw.rounded_rectangle((x-4,y-5,x+284,y+112),radius=8,
-                                   fill=(18,19,21),outline=(67,67,67),width=1)
-            draw.line((x+4,y+107,x+274,y+107),fill=(6,7,8),width=2)
-            draw.line((x+6,y-2,x+271,y-2),fill=(58,58,56),width=1)
-            draw.rectangle((x+2,y+2,x+5,y+105),fill=(34,35,36))
-        # Engraved area heading in band, left-aligned to wood cheek.
-        header=("GENESIS // " if page["name"]=="GENESIS" and row==0 else
-                page["name"] + " // ")
-        sections=section_names(page["name"],row)
-        label(draw,31,start+12,header+"    "+sections,12,PALETTE["text"],True,max_width=1060)
-        label(draw,1126,start+13,"LIBERTY",11,(252,222,169),True,max_width=100)
-        screw(draw,1244,start+21)
-        screw(draw,1078,start+21)
-    wood(draw,rng)
-    # Studio-series identity; unobtrusive since every control must remain editable.
-    label(draw,25,HEIGHT-16,"LIBERTY MUSIC SOFTWARE  /  GENESIS ANALOG SERIES",9,(142,141,137),False,max_width=510)
-    label(draw,1108,HEIGHT-16,f"PANEL {page_no+1:02d}/20",9,(142,141,137),True,max_width=130)
-    out=out_dir/page["background"]
-    img.save(out,format="PNG",optimize=True)
-    return out
-
-def section_names(name,row):
-    if name == "GENESIS":
-        return (
-            "DCO A    /    DCO B    /    MIXER    /    SUB",
-            "VCF CUTOFF    /    RESONANCE    /    FILTER MODE    /    DRIVE",
-            "LFO    /    MODULATION    /    CHORUS    /    DELAY",
-            "VCA LEVEL    /    DETUNE    /    ENVELOPE    /    ARPEGGIATOR",
-        )[row]
-    if name.startswith("MATRIX"):
-        return ("MOD ROUTING  /  SOURCE  /  DESTINATION  /  AMOUNT  /  POLARITY",
-                "MOD ROUTING  /  TOUCH CONTROL  /  Q-LINK",
-                "MOD ROUTING  /  SOURCE  /  DESTINATION  /  AMOUNT  /  POLARITY",
-                "MOD ROUTING  /  TOUCH CONTROL  /  Q-LINK")[row]
-    if name in ("CHORUS","DELAY","REVERB"):
-        return ("STUDIO EFFECTS    /    ANALOG CHARACTER",
-                "MIX    /    TIME    /    MODULATION    /    STEREO",
-                "STUDIO EFFECTS    /    SIGNAL PATH",
-                "STUDIO EFFECTS    /    OUTPUT CONTROL")[row]
-    if name in ("AMP ENV","MOD ENV"):
-        return ("ENVELOPES    /    ATTACK    /    DECAY    /    SUSTAIN    /    RELEASE",
-                "ENVELOPE SHAPING    /    TOUCH CONTROL",
-                "MODULATION    /    VOICE DYNAMICS",
-                "ENVELOPE SHAPING    /    Q-LINK")[row]
-    if name in ("ARP","PERFORM"):
-        return ("PERFORMANCE    /    LIVE CONTROL",
-                "RHYTHM    /    EXPRESSION    /    SYNC",
-                "PERFORMANCE    /    VOICE",
-                "ARPEGGIATOR    /    CONTROL")[row]
-    return ("ANALOG SYNTHESIS    /    SIGNAL PATH",
-            "SOUND SHAPING    /    TOUCH CONTROL",
-            "STUDIO CONTROL    /    MODULATION",
-            "SYNTH ENGINE    /    Q-LINK")[row]
+        jitter=int(2*math.sin(y*.48)+rng.uniform(-1,1))
+        d.line((19,y,1261,y),fill=(22+jitter,23+jitter,26+jitter))
+    sections=("GENESIS / ANALOG UI 03","VCF / FILTER","MODULATION / EFFECTS","VCA / PERFORMANCE")
+    for row in range(4 if main else (1 if len(page["controls"])<=4 else 2)):
+        y0=(ROW_STARTS[row]+6 if main else
+            (105 if len(page["controls"])<=4 else (15 if row==0 else 302)))
+        accent=BARS[row%4] if main else (BARS[0] if row==0 else BARS[1])
+        shade(d,y0,y0+32,tuple(min(255,k+21) for k in accent),accent,23,1257)
+        d.line((23,y0,1257,y0),fill=(205,148,67),width=1)
+        text=sections[row] if main else page["name"]+(" / SOUND ENGINE" if row==0 else " / MODULATION & Q-LINK")
+        label(d,32,y0+9,text,17,(248,231,204),True,max_width=1000)
+        label(d,1136,y0+9,"LIBERTY",11,(252,215,151),True,max_width=107)
+    for i,(x,y,w,h) in enumerate(layout_for(page)):
+        d.rounded_rectangle((x-5,y-5,x+w+5,y+h+5),radius=8,fill=(23,25,27),
+                            outline=(104,99,89),width=2)
+        d.rounded_rectangle((x+1,y+1,x+w-1,y+h-1),radius=6,fill=(28,30,33),
+                            outline=(69,69,68),width=1)
+        d.line((x+10,y+8,x+w-10,y+8),fill=(107,100,85),width=1)
+        d.rounded_rectangle((x+7,y+h-9,x+w-7,y+h-6),radius=1,
+                            fill=(219,162,60) if i%4==0 else ((151,58,59) if i%2 else (48,101,140)))
+    if not main and len(page["controls"])<=4:
+        label(d,70,467,"GENESIS / ANALOG SERIES",17,(106,103,95),True,max_width=750)
+        d.line((70,504,1208,504),fill=(65,64,61),width=1)
+    wood(d,rng)
+    label(d,25,HEIGHT-16,"LIBERTY MUSIC SOFTWARE / GENESIS / ANALOG UI 03",
+          10,(168,162,149),False,max_width=600)
+    label(d,1110,HEIGHT-16,f"PANEL {page_no+1:02d}/20",10,
+          (168,162,149),True,max_width=135)
+    dest=out_dir/page["background"]
+    im.save(dest,format="PNG",optimize=True)
+    return dest
 
 def main():
     if len(sys.argv)!=3:

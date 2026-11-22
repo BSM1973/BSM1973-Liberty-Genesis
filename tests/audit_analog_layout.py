@@ -12,6 +12,7 @@ for page in ui["pages"]:
     assert page["name"] not in seen
     seen.add(page["name"])
     assert 0<len(page["controls"])<=16
+    assert all(c.get("param") for c in page["controls"]),page["name"]
     bg=assets/page["background"]
     assert bg.is_file(),bg
     with Image.open(bg) as im:

@@ -1,0 +1,46 @@
+LIBERTY GENESIS — INSTALLATION DE LA NOUVELLE INTERFACE ANALOG UI 03
+Version 0.1.2 — MPC Standalone
+
+IMPORTANT : le nouveau design est dans le dossier « Plugin Skins ». Il ne suffit pas
+de remplacer les fichiers ARM32 ou ARM64 seuls.
+
+1. Le téléchargement GitHub Actions est parfois un ZIP contenant un second ZIP.
+   Extraire les deux archives pour obtenir le dossier :
+   Liberty Music Software - VST - Liberty Genesis
+
+2. Sur la clé USB, carte SD ou le disque utilisé par la MPC, ouvrir le dossier
+   « VST2 Plugins ». Sauvegarder l'ancien dossier Genesis si nécessaire, puis
+   le retirer de « VST2 Plugins » (ne pas seulement fusionner les anciens fichiers).
+
+3. Copier le dossier COMPLET « Liberty Music Software - VST - Liberty Genesis »
+   dans « VST2 Plugins », tel quel, avec ses sous-dossiers VST et Plugin Skins.
+
+   La structure doit être :
+   VST2 Plugins/
+      Liberty Music Software - VST - Liberty Genesis/
+         plugin.json
+         version.xml
+         VST/
+            liberty-genesis-arm32.so
+            liberty-genesis-arm64.so
+         Plugin Skins/
+            TUI.json
+            Q-Links.json
+            genesis-panel-genesis.png
+            fader_v_uni.png
+            [autres assets de l'interface]
+
+4. Éjecter le support proprement et REDÉMARRER COMPLÈTEMENT la MPC.
+   Les habillages visuels peuvent rester en mémoire tant que la MPC est allumée.
+
+5. Ouvrir Genesis > Program Edit. La nouvelle page GENESIS affiche
+   « GENESIS / ANALOG UI 03 » et quatre rangées de 4 contrôles interactifs.
+   Si ce marquage n'apparaît pas, c'est que cette nouvelle interface
+   n'est pas celle que la MPC affiche. Vérifier qu'il n'y a pas d'autre copie
+   de Liberty Genesis sur un autre support et que le dossier Plugin Skins
+   a bien été copié.
+
+Documentation du SDK MPC : docs/install-and-test.md dans
+https://github.com/inmusic-software/mpc-plugin-builder-sdk
+
+Note : les contrôles et le rendu restent à valider sur l'écran matériel.

@@ -1,26 +1,40 @@
 #!/usr/bin/env python3
-"""Assert the generated MPC TUI really uses a handcrafted 8x2 panel, not the old 4x4 template."""
-import json,sys,pathlib
-if len(sys.argv)!=2:raise SystemExit("Usage: audit_built_analog_skin.py <Plugin Skins folder>")
-skin=pathlib.Path(sys.argv[1])
-tui=json.loads((skin/"TUI.json").read_text(encoding="utf-8"))
-page=tui["pageData"]
-tabs=page["tabs"]
-assert len(tabs)==20
-assert len({(t["fnKeyIndex"],t["fnKeySubIndex"]) for t in tabs})==20
-assert all(0<=t["fnKeyIndex"]<=5 for t in tabs)
-main=next(t for t in tabs if t["tabName"]=="GENESIS")
-controls=main["componentDefinition"]["componentsData"]
-assert len(controls)==16,len(controls)
-assert all(c["componentData"]["type"].startswith("genAnalog") for c in controls)
-bounds=[tuple(int(v) for v in c["bounds"]["bounds"].split()) for c in controls]
-assert len({b[0] for b in bounds[:8]})==8
-assert all(b[1]==54 for b in bounds[:8])
-assert all(b[1]==350 for b in bounds[8:])
-assert all(0<=x and x+w<=1280 and 0<=y and y+h<=628 for x,y,w,h in bounds)
-assert main["qlinkBoundsData"]==["14 44 627 262","638 44 627 262","14 340 627 262","638 340 627 262"]
-defs={entry["key"] for entry in page["componentDefinitions"]["localComponentDefinitions"]}
-assert {"genAnalogKnob","genAnalogMenu","genAnalogFader","genAnalogToggle"}.issubset(defs)
-for f in ("genesis-panel-genesis.png","fader_v_uni.png","knob_uni.png","TUI.json","Q-Links.json"):
-    assert (skin/f).is_file(),f
-print("GENESIS revision 02 PASSED: real 16-control 8x2 touch GUI, 4 hardware banks and skin assets present.")
+"""Gate native release on all 20 live pages and accessibility of active controls."""
+import json,pathlib,sys
+skins=pathlib.Path(sys.argv[1])
+tui=json.loads((skins/"TUI.json").read_text(encoding="utf-8"))
+spec=json.loads((skins.parents[2]/"ui.json").read_text(encoding="utf-8"))
+tabs={t["tabName"]:t for t in tui["pageData"]["tabs"]}
+defs={d["key"]:d["value"] for d in tui["pageData"]["componentDefinitions"]["localComponentDefinitions"]}
+assert len(tabs)==20 and len({(t["fnKeyIndex"],t["fnKeySubIndex"]) for t in tabs.values()})==20
+mapped=set()
+for p in spec["pages"]:
+    tab=tabs[p["name"]];c=tab["componentDefinition"]["componentsData"]
+    assert len(c)==len(p["controls"]),(p["name"],len(c),len(p["controls"]))
+    assert len(tab["qlinkBoundsData"])==(len(c)+3)//4
+    rects=[]
+    for source,ctrl in zip(p["controls"],c):
+        assert ctrl["componentData"]["name"]==source["param"]
+        key=ctrl["componentData"]["type"]
+        assert key.startswith("genMain" if p["name"]=="GENESIS" else "genDetail")
+        names=[x for x in defs[key]["componentsData"] if x["componentData"]["name"]=="Name"]
+        assert len(names)==1
+        assert names[0]["componentData"]["data"]["textStyle"]["font"]["height"]>=25
+        binding=ctrl["handle remapping"]["map"]
+        assert len(binding)==1
+        mapped.add(binding[0]["value"])
+        x,y,w,h=map(int,ctrl["bounds"]["bounds"].split())
+        assert x>=0 and y>=0 and x+w<=1280 and y+h<=628
+        rects.append((x,y,x+w,y+h))
+    for i,a in enumerate(rects):
+        for b in rects[i+1:]:
+            assert a[2]<=b[0] or b[2]<=a[0] or a[3]<=b[1] or b[3]<=a[1],(p["name"],a,b)
+    for i,r in enumerate(tab["qlinkBoundsData"]):
+        x,y,w,h=map(int,r.split())
+        for bx,by,bx2,by2 in rects[i*4:i*4+4]:
+            assert x<=bx and y<=by and bx2<=x+w and by2<=y+h
+    assert (skins/p["background"]).is_file()
+assert len(mapped)==129,len(mapped)
+for asset in ("knob_uni.png","fader_h_uni.png","TUI.json","Q-Links.json"):
+    assert (skins/asset).is_file(),asset
+print("GENESIS UI 03 PASSED: all 20 active-only pages, 129 params, >=25pt titles, no overlaps.")

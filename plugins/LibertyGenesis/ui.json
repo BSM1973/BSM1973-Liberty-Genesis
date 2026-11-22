@@ -1,35 +1,19 @@
 {
   "kit": {
     "theme": "amber",
-    "accent": "ffd9b86a"
+    "accent": "ffffb535"
   },
-  "qlinkGroups": "columns",
+  "qlinkGroups": "rows",
   "style": {
-    "background": "ff0c1729",
-    "accent": "ffd9b86a",
-    "text": "fff5f7fb",
-    "muted": "ff9fb2ca"
+    "background": "ff101215",
+    "accent": "ffffb535",
+    "text": "fff3f0e8",
+    "muted": "ffbcb8b0"
   },
   "pages": [
     {
-      "name": "OSC",
+      "name": "GENESIS",
       "controls": [
-        {
-          "widget": "text",
-          "text": "OSCILLATOR A"
-        },
-        {
-          "widget": "text",
-          "text": "OSCILLATOR B"
-        },
-        {
-          "widget": "text",
-          "text": "BLEND"
-        },
-        {
-          "widget": "text",
-          "text": "OUTPUT"
-        },
         {
           "param": "Wave A",
           "widget": "switch"
@@ -40,18 +24,47 @@
         },
         {
           "param": "Mix",
-          "widget": "knob"
-        },
-        {
-          "param": "Volume",
           "widget": "fader"
         },
         {
           "param": "Sub Level",
+          "widget": "fader"
+        },
+        {
+          "param": "Cutoff",
           "widget": "knob"
         },
         {
-          "widget": "empty"
+          "param": "Resonance",
+          "widget": "knob"
+        },
+        {
+          "param": "Filter Mode",
+          "widget": "switch"
+        },
+        {
+          "param": "Filter Drive",
+          "widget": "knob"
+        },
+        {
+          "param": "LFO Rate",
+          "widget": "knob"
+        },
+        {
+          "param": "LFO Depth",
+          "widget": "fader"
+        },
+        {
+          "param": "Chorus Mix",
+          "widget": "fader"
+        },
+        {
+          "param": "Delay Mix",
+          "widget": "fader"
+        },
+        {
+          "param": "Volume",
+          "widget": "fader"
         },
         {
           "param": "Detune",
@@ -59,9 +72,145 @@
           "polarity": "bipolar"
         },
         {
-          "widget": "empty"
+          "param": "Attack",
+          "widget": "fader"
+        },
+        {
+          "param": "Arp On",
+          "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-genesis.png"
+    },
+    {
+      "name": "OSC MOD",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "PULSE WIDTH"
+        },
+        {
+          "widget": "text",
+          "text": "PWM"
+        },
+        {
+          "widget": "text",
+          "text": "FM"
+        },
+        {
+          "widget": "text",
+          "text": "RING"
+        },
+        {
+          "param": "Pulse Width",
+          "widget": "knob"
+        },
+        {
+          "param": "PWM Depth",
+          "widget": "knob"
+        },
+        {
+          "param": "FM Depth",
+          "widget": "knob"
+        },
+        {
+          "param": "Ring Mix",
+          "widget": "knob"
+        },
+        {
+          "param": "Noise Level",
+          "widget": "knob"
+        },
+        {
+          "param": "Osc Sync",
+          "widget": "switch"
+        }
+      ],
+      "background": "genesis-panel-osc-mod.png"
+    },
+    {
+      "name": "TUNING",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "OCTAVE A"
+        },
+        {
+          "widget": "text",
+          "text": "SEMITONE A"
+        },
+        {
+          "widget": "text",
+          "text": "OCTAVE B"
+        },
+        {
+          "widget": "text",
+          "text": "SEMITONE B"
+        },
+        {
+          "param": "Octave A",
+          "widget": "knob"
+        },
+        {
+          "param": "Semi A",
+          "widget": "knob"
+        },
+        {
+          "param": "Octave B",
+          "widget": "knob"
+        },
+        {
+          "param": "Semi B",
+          "widget": "knob"
+        }
+      ],
+      "background": "genesis-panel-tuning.png"
+    },
+    {
+      "name": "UNISON",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "COUNT"
+        },
+        {
+          "widget": "text",
+          "text": "DETUNE"
+        },
+        {
+          "widget": "text",
+          "text": "WIDTH"
+        },
+        {
+          "widget": "text",
+          "text": "BLEND"
+        },
+        {
+          "param": "Unison Count",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Detune",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Width",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Blend",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni Phase",
+          "widget": "knob"
+        },
+        {
+          "param": "Uni CPU",
+          "widget": "switch"
+        }
+      ],
+      "background": "genesis-panel-unison.png"
     },
     {
       "name": "FILTER",
@@ -113,7 +262,8 @@
           "param": "LFO Depth",
           "widget": "knob"
         }
-      ]
+      ],
+      "background": "genesis-panel-filter.png"
     },
     {
       "name": "AMP ENV",
@@ -150,44 +300,72 @@
           "param": "Release",
           "widget": "fader"
         }
-      ]
+      ],
+      "background": "genesis-panel-amp-env.png"
     },
     {
-      "name": "PERFORM",
+      "name": "MOD ENV",
       "controls": [
         {
           "widget": "text",
-          "text": "TONE"
+          "text": "ATTACK"
         },
         {
           "widget": "text",
-          "text": "MOTION"
+          "text": "DECAY"
         },
         {
           "widget": "text",
-          "text": "PUNCH"
+          "text": "SUSTAIN"
         },
         {
           "widget": "text",
-          "text": "LIVE CONTROL"
+          "text": "RELEASE"
         },
         {
-          "param": "Macro Tone",
+          "param": "Mod Attack",
+          "widget": "fader"
+        },
+        {
+          "param": "Mod Decay",
+          "widget": "fader"
+        },
+        {
+          "param": "Mod Sustain",
+          "widget": "fader"
+        },
+        {
+          "param": "Mod Release",
+          "widget": "fader"
+        },
+        {
+          "widget": "text",
+          "text": "LFO 2"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "widget": "empty"
+        },
+        {
+          "param": "LFO 2 Rate",
           "widget": "knob"
         },
         {
-          "param": "Macro Motion",
-          "widget": "knob"
+          "widget": "empty"
         },
         {
-          "param": "Macro Punch",
-          "widget": "knob"
+          "widget": "empty"
         },
         {
-          "widget": "text",
-          "text": "Q-LINK READY"
+          "widget": "empty"
         }
-      ]
+      ],
+      "background": "genesis-panel-mod-env.png"
     },
     {
       "name": "CHORUS",
@@ -224,7 +402,8 @@
           "param": "Chorus Width",
           "widget": "knob"
         }
-      ]
+      ],
+      "background": "genesis-panel-chorus.png"
     },
     {
       "name": "DELAY",
@@ -269,7 +448,8 @@
           "param": "Delay Tone",
           "widget": "knob"
         }
-      ]
+      ],
+      "background": "genesis-panel-delay.png"
     },
     {
       "name": "REVERB",
@@ -314,134 +494,46 @@
           "param": "Reverb Width",
           "widget": "knob"
         }
-      ]
+      ],
+      "background": "genesis-panel-reverb.png"
     },
     {
-      "name": "OSC MOD",
+      "name": "PERFORM",
       "controls": [
         {
           "widget": "text",
-          "text": "PULSE WIDTH"
+          "text": "TONE"
         },
         {
           "widget": "text",
-          "text": "PWM"
+          "text": "MOTION"
         },
         {
           "widget": "text",
-          "text": "FM"
+          "text": "PUNCH"
         },
         {
           "widget": "text",
-          "text": "RING"
+          "text": "LIVE CONTROL"
         },
         {
-          "param": "Pulse Width",
+          "param": "Macro Tone",
           "widget": "knob"
         },
         {
-          "param": "PWM Depth",
+          "param": "Macro Motion",
           "widget": "knob"
         },
         {
-          "param": "FM Depth",
+          "param": "Macro Punch",
           "widget": "knob"
         },
         {
-          "param": "Ring Mix",
-          "widget": "knob"
-        },
-        {
-          "param": "Noise Level",
-          "widget": "knob"
-        },
-        {
-          "param": "Osc Sync",
-          "widget": "switch"
+          "widget": "text",
+          "text": "Q-LINK READY"
         }
-      ]
-    },
-    {
-      "name": "TUNING",
-      "controls": [
-        {
-          "widget": "text",
-          "text": "OCTAVE A"
-        },
-        {
-          "widget": "text",
-          "text": "SEMITONE A"
-        },
-        {
-          "widget": "text",
-          "text": "OCTAVE B"
-        },
-        {
-          "widget": "text",
-          "text": "SEMITONE B"
-        },
-        {
-          "param": "Octave A",
-          "widget": "knob"
-        },
-        {
-          "param": "Semi A",
-          "widget": "knob"
-        },
-        {
-          "param": "Octave B",
-          "widget": "knob"
-        },
-        {
-          "param": "Semi B",
-          "widget": "knob"
-        }
-      ]
-    },
-    {
-      "name": "UNISON",
-      "controls": [
-        {
-          "widget": "text",
-          "text": "COUNT"
-        },
-        {
-          "widget": "text",
-          "text": "DETUNE"
-        },
-        {
-          "widget": "text",
-          "text": "WIDTH"
-        },
-        {
-          "widget": "text",
-          "text": "BLEND"
-        },
-        {
-          "param": "Unison Count",
-          "widget": "knob"
-        },
-        {
-          "param": "Uni Detune",
-          "widget": "knob"
-        },
-        {
-          "param": "Uni Width",
-          "widget": "knob"
-        },
-        {
-          "param": "Uni Blend",
-          "widget": "knob"
-        },
-        {
-          "param": "Uni Phase",
-          "widget": "knob"
-        },
-        {
-          "param": "Uni CPU",
-          "widget": "switch"
-        }
-      ]
+      ],
+      "background": "genesis-panel-perform.png"
     },
     {
       "name": "ARP",
@@ -494,7 +586,8 @@
           "param": "Arp Hold",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-arp.png"
     },
     {
       "name": "MATRIX 1",
@@ -565,7 +658,8 @@
           "param": "M2 Polarity",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-matrix-1.png"
     },
     {
       "name": "MATRIX 2",
@@ -636,7 +730,8 @@
           "param": "M4 Polarity",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-matrix-2.png"
     },
     {
       "name": "MATRIX 3",
@@ -707,7 +802,8 @@
           "param": "M6 Polarity",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-matrix-3.png"
     },
     {
       "name": "MATRIX 4",
@@ -778,7 +874,8 @@
           "param": "M8 Polarity",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-matrix-4.png"
     },
     {
       "name": "MATRIX 5",
@@ -849,7 +946,8 @@
           "param": "M10 Polarity",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-matrix-5.png"
     },
     {
       "name": "MATRIX 6",
@@ -920,7 +1018,8 @@
           "param": "M12 Polarity",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-matrix-6.png"
     },
     {
       "name": "MATRIX 7",
@@ -991,7 +1090,8 @@
           "param": "M14 Polarity",
           "widget": "switch"
         }
-      ]
+      ],
+      "background": "genesis-panel-matrix-7.png"
     },
     {
       "name": "MATRIX 8",
@@ -1062,70 +1162,8 @@
           "param": "M16 Polarity",
           "widget": "switch"
         }
-      ]
-    },
-    {
-      "name": "MOD ENV",
-      "controls": [
-        {
-          "widget": "text",
-          "text": "ATTACK"
-        },
-        {
-          "widget": "text",
-          "text": "DECAY"
-        },
-        {
-          "widget": "text",
-          "text": "SUSTAIN"
-        },
-        {
-          "widget": "text",
-          "text": "RELEASE"
-        },
-        {
-          "param": "Mod Attack",
-          "widget": "fader"
-        },
-        {
-          "param": "Mod Decay",
-          "widget": "fader"
-        },
-        {
-          "param": "Mod Sustain",
-          "widget": "fader"
-        },
-        {
-          "param": "Mod Release",
-          "widget": "fader"
-        },
-        {
-          "widget": "text",
-          "text": "LFO 2"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "param": "LFO 2 Rate",
-          "widget": "knob"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        },
-        {
-          "widget": "empty"
-        }
-      ]
+      ],
+      "background": "genesis-panel-matrix-8.png"
     }
   ]
 }

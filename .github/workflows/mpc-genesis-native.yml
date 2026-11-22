@@ -5,6 +5,7 @@ on:
     paths:
       - 'plugins/LibertyGenesis/**'
       - 'tests/**'
+      - 'tools/**'
       - 'CMakeLists.txt'
       - 'src/GenesisSynth.h'
       - 'src/GenesisPresets.h'
@@ -37,6 +38,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Build premium analog UI assets and check layout
+        run: |
+          python -m pip install --disable-pip-version-check pillow==11.3.0
+          python genesis/tools/render_analog_skin.py genesis/plugins/LibertyGenesis/ui.json genesis/plugins/LibertyGenesis/assets
+          python genesis/tests/audit_analog_layout.py genesis/plugins/LibertyGenesis/ui.json genesis/plugins/LibertyGenesis/assets
       - name: Audit all interface pages and parameter mappings
         run: python genesis/tests/audit_ui.py
       - name: Install Genesis plugin in SDK workspace
@@ -64,6 +70,8 @@ jobs:
       - name: Build and validate MPC native plugin
         working-directory: mpc-sdk
         run: python tools/build.py plugins/LibertyGenesis
+      - name: Map 20 pages to six MPC function keys
+        run: python genesis/tools/group_skin_tabs.py mpc-sdk/plugins/LibertyGenesis/build/'Liberty Music Software - VST - Liberty Genesis'/'Plugin Skins'
       - name: Strict SDK package validation
         working-directory: mpc-sdk
         run: python tools/validate.py plugins/LibertyGenesis --strict

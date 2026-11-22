@@ -18,7 +18,7 @@ public:
   i.name = "Liberty Genesis";
   i.vendor = "Liberty Music Software";
   i.uniqueId = MPC_FOURCC('L','G','n','s');
-  i.version = 100;
+  i.version = 101;
   i.isInstrument = true;
   i.numInputs = 0;
   i.numOutputs = 2;

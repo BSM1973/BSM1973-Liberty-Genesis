@@ -1,7 +1,7 @@
 {
   "name": "Liberty Genesis",
   "manufacturer": "Liberty Music Software",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "format": "vst2",
   "kind": "instrument",
   "uid": "LGns",
@@ -10,7 +10,7 @@
   "category": "Synth",
   "file32": "VST/liberty-genesis-arm32.so",
   "file64": "VST/liberty-genesis-arm64.so",
-  "description": "Liberty Genesis: 16-voice synthesizer for MPC standalone",
+  "description": "Genesis Analog UI 02: hardware-style touchscreen synth with 20 custom MPC panels",
   "author": "Liberty Music Software",
   "url": "https://libertymusicsoftware.com",
   "license": "Proprietary"

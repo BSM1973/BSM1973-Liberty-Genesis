@@ -75,7 +75,61 @@ def wood(draw, rng):
         draw.line((x+2 if x==18 else x-2,0,x+2 if x==18 else x-2,HEIGHT),
                   fill=(8,9,10),width=2)
 
+def premium_main_panel(page, number, out_dir):
+    """GENESIS front panel: sixteen real touch controls, two horizontal decks.
+    Module colours, LED rails and engraving are drawn behind live firmware widgets.
+    """
+    rng=random.Random(2037)
+    img=Image.new("RGB",(WIDTH,HEIGHT),(15,16,17))
+    d=ImageDraw.Draw(img)
+    for y in range(HEIGHT):
+        n=round(3*math.sin(y*0.38)+rng.uniform(-1,1))
+        d.line((18,y,1261,y),fill=(27+n,27+n,29+n))
+    cols=("DCO A","DCO B","MIX","SUB","VCF CUT","VCF RES","VCF MODE","VCF DRIVE",
+          "LFO RATE","LFO DEPTH","CHORUS","DELAY","VOLUME","DETUNE","AMP ENV","ARP ON")
+    values=("DCO","DCO","MIXER","MIXER","FILTER","FILTER","FILTER","FILTER",
+            "MOD","MOD","FX","FX","OUTPUT","TUNING","ENV","PERFORM")
+    for row in range(2):
+        band_y=10 if row==0 else 314
+        band=(151,42,45) if row==0 else (42,83,115)
+        shade(d,band_y,band_y+33,tuple(min(255,a+30) for a in band),band,21,1259)
+        d.line((21,band_y,1259,band_y),fill=tuple(min(255,a+70) for a in band),width=1)
+        d.line((21,band_y+34,1259,band_y+34),fill=(5,6,7),width=2)
+        label(d,31,band_y+9,"GENESIS  /  ANALOG UI 02" if row==0 else
+              "SOUND LAB  /  MODULATION  /  EFFECTS  /  PERFORMANCE",
+              16,(249,239,217),True,max_width=900)
+        label(d,1095,band_y+10,"LIBERTY",13,(248,214,156),True,max_width=140)
+        for col in range(8):
+            x=24+156*col
+            y=54 if row==0 else 350
+            d.rounded_rectangle((x,y,x+139,y+242),radius=6,fill=(23,24,25),outline=(94,91,83),width=1)
+            d.line((x+4,y+4,x+135,y+4),fill=(122,116,97),width=1)
+            d.rectangle((x+4,y+31,x+135,y+33),fill=(70,67,61))
+            n=row*8+col
+            # A discreet module number in metallic lettering, not a fake interactive control.
+            label(d,x+10,y+8,values[n],10,(163,163,157),True,max_width=118)
+            # graduation marks for the vertical-fader slots, behind their live control track
+            if n in (2,3,9,10,11,12,14):
+                for j in range(11):
+                    yy=y+42+j*14
+                    d.line((x+25,yy,x+33+(5 if j%5==0 else 0),yy),
+                           fill=(95,95,89),width=1)
+                    d.line((x+105,yy,x+113+(5 if j%5==0 else 0),yy),
+                           fill=(95,95,89),width=1)
+            d.ellipse((x+121,y+224,x+127,y+230),fill=(221,151,43))
+            d.line((x+7,y+235,x+130,y+235),fill=(8,9,10),width=1)
+            screw(d,x+8,y+236)
+    wood(d,rng)
+    label(d,23,HEIGHT-17,"LIBERTY MUSIC SOFTWARE  /  GENESIS  /  ANALOG SERIES  /  UI REV. 02",
+          9,(176,171,158),True,max_width=770)
+    label(d,1100,HEIGHT-17,"16 LIVE CONTROLS",9,(176,171,158),True,max_width=152)
+    out=out_dir/page["background"]
+    img.save(out,format="PNG",optimize=True)
+    return out
+
 def backgrounds(page, page_no, out_dir):
+    if page["name"]=="GENESIS":
+        return premium_main_panel(page,page_no,out_dir)
     rng=random.Random(701 + page_no * 193)
     img=Image.new("RGB",(WIDTH,HEIGHT),PALETTE["back"])
     draw=ImageDraw.Draw(img)

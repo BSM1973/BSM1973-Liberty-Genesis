@@ -73,6 +73,8 @@ jobs:
         run: python tools/build.py plugins/LibertyGenesis
       - name: Map 20 pages to six MPC function keys
         run: python genesis/tools/group_skin_tabs.py mpc-sdk/plugins/LibertyGenesis/build/'Liberty Music Software - VST - Liberty Genesis'/'Plugin Skins'
+      - name: Build fully custom analog main panel
+        run: python genesis/tools/apply_analog_main.py mpc-sdk/plugins/LibertyGenesis/build/'Liberty Music Software - VST - Liberty Genesis'/'Plugin Skins'
       - name: Strict SDK package validation
         working-directory: mpc-sdk
         run: python tools/validate.py plugins/LibertyGenesis --strict

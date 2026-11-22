@@ -434,7 +434,8 @@
         },
         {
           "param": "Delay Sync",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "Feedback",
@@ -610,11 +611,13 @@
         },
         {
           "param": "M1 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M1 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M1 Amount",
@@ -643,11 +646,13 @@
         },
         {
           "param": "M2 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M2 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M2 Amount",
@@ -682,11 +687,13 @@
         },
         {
           "param": "M3 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M3 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M3 Amount",
@@ -715,11 +722,13 @@
         },
         {
           "param": "M4 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M4 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M4 Amount",
@@ -754,11 +763,13 @@
         },
         {
           "param": "M5 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M5 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M5 Amount",
@@ -787,11 +798,13 @@
         },
         {
           "param": "M6 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M6 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M6 Amount",
@@ -826,11 +839,13 @@
         },
         {
           "param": "M7 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M7 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M7 Amount",
@@ -859,11 +874,13 @@
         },
         {
           "param": "M8 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M8 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M8 Amount",
@@ -898,11 +915,13 @@
         },
         {
           "param": "M9 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M9 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M9 Amount",
@@ -931,11 +950,13 @@
         },
         {
           "param": "M10 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M10 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M10 Amount",
@@ -970,11 +991,13 @@
         },
         {
           "param": "M11 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M11 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M11 Amount",
@@ -1003,11 +1026,13 @@
         },
         {
           "param": "M12 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M12 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M12 Amount",
@@ -1042,11 +1067,13 @@
         },
         {
           "param": "M13 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M13 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M13 Amount",
@@ -1075,11 +1102,13 @@
         },
         {
           "param": "M14 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M14 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M14 Amount",
@@ -1114,11 +1143,13 @@
         },
         {
           "param": "M15 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M15 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M15 Amount",
@@ -1147,11 +1178,13 @@
         },
         {
           "param": "M16 Source",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M16 Dest",
-          "widget": "switch"
+          "widget": "knob",
+          "overlay": "menu"
         },
         {
           "param": "M16 Amount",

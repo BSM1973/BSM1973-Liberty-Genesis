@@ -261,6 +261,7 @@ public:
   render(left,right,pos,ctx.numFrames);
  }
 private:
+ friend struct GenesisArpTimingTest;
  float wheel=0.f,pressure=0.f;
  double arpSR=48000.,arpPeriod=6000.,arpGate=.65,arpSwing=0.,untilStep=0.,untilOff=0.;
  bool arpEnabled=false,arpHold=false;

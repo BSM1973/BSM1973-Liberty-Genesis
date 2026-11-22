@@ -57,6 +57,10 @@ jobs:
         run: |
           c++ -std=c++17 -O2 -I mpc-sdk/framework -I mpc-sdk/plugins/LibertyGenesis/src genesis/tests/native_state.cpp -o /tmp/genesis-native-state
           /tmp/genesis-native-state
+      - name: Measure actual arp timing
+        run: |
+          c++ -std=c++17 -O2 -I mpc-sdk/framework -I mpc-sdk/plugins/LibertyGenesis/src genesis/tests/native_arp.cpp -o /tmp/genesis-native-arp
+          /tmp/genesis-native-arp
       - name: Build and validate MPC native plugin
         working-directory: mpc-sdk
         run: python tools/build.py plugins/LibertyGenesis
